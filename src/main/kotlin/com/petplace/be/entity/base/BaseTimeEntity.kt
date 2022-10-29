@@ -7,14 +7,13 @@ import javax.persistence.PrePersist
 import javax.persistence.PreUpdate
 
 @MappedSuperclass
-open class BaseTimeEntity {
+class BaseTimeEntity(
+        @Column(name = "created_at", nullable = false)
+        protected var createAt: LocalDateTime,
 
-    @Column(name = "created_at", nullable = false)
-    protected lateinit var createAt: LocalDateTime
-
-    @Column(name = "updated_at")
-    protected lateinit var updateAt: LocalDateTime
-
+        @Column(name = "updated_at")
+        protected var updateAt: LocalDateTime
+) {
     @PrePersist
     fun createAt(){
         this.createAt = LocalDateTime.now()

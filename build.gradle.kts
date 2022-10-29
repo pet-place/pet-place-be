@@ -29,6 +29,11 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.7.5")
+	implementation("com.google.api-client:google-api-client:2.0.0")
+	implementation("com.google.api-client:google-api-client-jackson2:2.0.0")
+	implementation("org.projectlombok:lombok:1.18.22")
+
+
 
 	runtimeOnly("mysql:mysql-connector-java")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
