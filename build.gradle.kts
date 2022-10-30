@@ -21,10 +21,16 @@ repositories {
 }
 
 dependencies {
+	implementation(project(":common"))
+
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("io.jsonwebtoken:jjwt-api:0.11.2")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.2")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -32,6 +38,10 @@ dependencies {
 	implementation("com.google.api-client:google-api-client:2.0.0")
 	implementation("com.google.api-client:google-api-client-jackson2:2.0.0")
 	implementation("org.projectlombok:lombok:1.18.22")
+
+
+
+
 
 
 

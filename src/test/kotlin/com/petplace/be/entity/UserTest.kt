@@ -1,15 +1,13 @@
 package com.petplace.be.entity
 
-import com.petplace.be.user.UserRepository
+import com.petplace.be.user.repository.UserRepository
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @SpringBootTest
 @ActiveProfiles("dev")
