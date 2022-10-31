@@ -1,5 +1,6 @@
 package com.petplace.be.entity
 
+import org.hibernate.annotations.GenericGenerator
 import javax.persistence.*
 
 @Entity
@@ -12,6 +13,7 @@ class User {
         lateinit var accessToken: String
         lateinit var phoneNumber: String
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        var id: Long? = null
+        @GenericGenerator(name = "uuid", strategy ="com.petplace.be.utils.UuidGenerator")
+        @GeneratedValue(generator = "uuid")
+        var id: String? = null
 }
