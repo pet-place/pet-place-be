@@ -1,4 +1,4 @@
-package com.petplace.be.config.token
+package com.petplace.be.config.jwt
 
 import com.petplace.be.constract.ErrorCode
 import org.slf4j.LoggerFactory

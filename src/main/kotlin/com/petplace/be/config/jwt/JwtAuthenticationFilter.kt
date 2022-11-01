@@ -1,4 +1,4 @@
-package com.petplace.be.config.token
+package com.petplace.be.config.jwt
 
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
@@ -14,14 +14,14 @@ class JwtAuthenticationFilter: OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val jwt:String? = getJwtFromRequest(request) //request에서 jwt 토큰을 꺼낸다.
+        val jwt:String? = getJwtFromRequest(request)
 
         if (jwt != null && JwtTokenProvider.validateToken(jwt)) {
-            val userId: String? = JwtTokenProvider.getUserIdFormJwt(jwt) //jwt에서 사용자 id를 꺼낸다.
-            val authentication = UserAuthentication(userId, null, null) //id를 인증한다.
-            authentication.setDetails(WebAuthenticationDetailsSource().buildDetails(request)) //기본적으로 제공한 details 세팅
-            SecurityContextHolder.getContext()
-                .setAuthentication(authentication) //세션에서 계속 사용하기 위해 securityContext에 Authentication 등록
+            val userId: String? = JwtTokenProvider.getUserIdFormJwt(jwt)
+            val authentication = UserAuthentication(userId, null, null)
+            authentication.setDetails(WebAuthenticationDetailsSource().buildDetails(request))
+            SecurityContextHolder.getContext().setAuthentication(authentication)
+
         } else {
             if (jwt == null) {
                 request.setAttribute("unauthorization", "401 인증키 없음.")

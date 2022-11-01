@@ -6,9 +6,8 @@ import com.google.api.client.http.HttpTransport
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.JsonFactory
 import com.google.api.client.json.gson.GsonFactory
-import com.petplace.be.config.token.JwtTokenProvider
-import com.petplace.be.config.token.UserAuthentication
-import com.petplace.be.constract.ErrorCode
+import com.petplace.be.config.jwt.JwtTokenProvider
+import com.petplace.be.config.jwt.UserAuthentication
 import com.petplace.be.entity.User
 import com.petplace.be.login.result.LoginResult
 import com.petplace.be.user.UserRepository

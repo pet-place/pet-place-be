@@ -1,12 +1,14 @@
-package com.petplace.be.config.token
+package com.petplace.be.config.jwt
 
-import io.jsonwebtoken.Claims
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.security.core.Authentication
+import java.security.SignatureException
 import java.util.*
 
 object JwtTokenProvider {
+    private val logger: Logger = LoggerFactory.getLogger(JwtTokenProvider::class.java)
     const val JWT_SECRET: String = "ALSDFJAWIEJDSLFJSDKFAEOSPWOREIQEIRTOERGJKFBMXMVXLDKFSEORIWORTJLDFASDMCXVMZXKLVJKEJIAJDKFKJSDFJKASDKJFHEI"
     const val JWT_EXPIRATION_MS: Int = 604800000
 
@@ -36,7 +38,20 @@ object JwtTokenProvider {
 
     // jwt 유효성 검사
     fun validateToken(token: String?): Boolean{
-       // ..
-        return true
+        try {
+            Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token)
+            return true
+        } catch (e: SignatureException) {
+            logger.error("Invalid JWT signature: {}", e.message)
+        } catch (e: MalformedJwtException) {
+            logger.error("Invalid JWT token: {}", e.message)
+        } catch (e: ExpiredJwtException) {
+            logger.error("JWT token is expired: {}", e.message)
+        } catch (e: UnsupportedJwtException) {
+            logger.error("JWT token is unsupported: {}", e.message)
+        } catch (e: IllegalArgumentException) {
+            logger.error("JWT claims string is empty: {}", e.message)
+        }
+        return false
     }
 }

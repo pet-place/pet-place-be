@@ -1,4 +1,4 @@
-package com.petplace.be.config.token
+package com.petplace.be.config.jwt.dto
 
 data class TokenResult (
     var grantType: String, // Bearer

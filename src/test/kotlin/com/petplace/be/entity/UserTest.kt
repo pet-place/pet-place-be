@@ -1,7 +1,7 @@
 package com.petplace.be.entity
 
-import com.petplace.be.config.token.JwtTokenProvider
-import com.petplace.be.config.token.UserAuthentication
+import com.petplace.be.config.jwt.JwtTokenProvider
+import com.petplace.be.config.jwt.UserAuthentication
 import com.petplace.be.user.UserRepository
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
