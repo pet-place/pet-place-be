@@ -1,13 +1,9 @@
 package com.petplace.be.login
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
-import com.google.api.client.http.HttpTransport
-import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.JsonFactory
-import com.google.api.client.json.gson.GsonFactory
 import com.petplace.be.config.jwt.JwtTokenProvider
 import com.petplace.be.config.jwt.UserAuthentication
+import com.petplace.be.config.oauth.GoogleAuthentication
 import com.petplace.be.entity.User
 import com.petplace.be.login.result.LoginResult
 import com.petplace.be.user.UserRepository
@@ -23,7 +19,7 @@ class LoginService {
     fun loginWithGoogle(idToken: String): LoginResult {
 
         // idToken 검증
-        val googleIdToken = verifierIdToken(idToken) ?: throw Exception()
+        val googleIdToken = GoogleAuthentication.verifierIdToken(idToken) ?: throw Exception()
 
         var payload = googleIdToken.payload
         var result: LoginResult? = null
@@ -58,18 +54,6 @@ class LoginService {
             )
         }
         return result
-    }
-
-    // idToken 유효성 검증
-    private fun verifierIdToken(idToken: String): GoogleIdToken? {
-        val transport: HttpTransport = NetHttpTransport()
-        val jsonFactory: JsonFactory = GsonFactory.getDefaultInstance()
-        val verifier =
-            GoogleIdTokenVerifier.Builder(transport, jsonFactory)
-                    //TODO property 로 빼기
-                .setAudience(listOf("663371736991-3gjbva9d64mplielt3m14ji527q4ihad.apps.googleusercontent.com"))
-                .build()
-        return verifier.verify(idToken)
     }
 
     private fun isFirstLoginUser(payload: GoogleIdToken.Payload): Boolean {
