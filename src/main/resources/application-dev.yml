@@ -19,5 +19,10 @@ spring:
     password: qwer!@34
 
 
-
+oauth2:
+  jwt:
+    secret-key: ALSDFJAWIEJDSLFJSDKFAEOSPWOREIQEIRTOERGJKFBMXMVXLDKFSEORIWORTJLDFASDMCXVMZXKLVJKEJIAJDKFKJSDFJKASDKJFHEI
+    expiration: 604800000
+  google:
+    client-id: 663371736991-3gjbva9d64mplielt3m14ji527q4ihad.apps.googleusercontent.com
 
