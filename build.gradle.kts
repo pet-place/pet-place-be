@@ -42,6 +42,8 @@ dependencies {
 	implementation("joda-time:joda-time:2.12.1")
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 	implementation("org.apache.commons:commons-lang3:3.12.0")
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor
+	implementation("org.springframework.boot:spring-boot-configuration-processor:2.7.5")
 
 
 
