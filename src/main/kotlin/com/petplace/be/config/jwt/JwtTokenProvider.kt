@@ -3,25 +3,35 @@ package com.petplace.be.config.jwt
 import io.jsonwebtoken.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.PropertySource
 import org.springframework.security.core.Authentication
 import java.security.SignatureException
 import java.util.*
 
-object JwtTokenProvider {
+@Configuration
+@PropertySource("classpath:application-dev.properties")
+class JwtTokenProvider {
     private val logger: Logger = LoggerFactory.getLogger(JwtTokenProvider::class.java)
-    const val JWT_SECRET: String = "ALSDFJAWIEJDSLFJSDKFAEOSPWOREIQEIRTOERGJKFBMXMVXLDKFSEORIWORTJLDFASDMCXVMZXKLVJKEJIAJDKFKJSDFJKASDKJFHEI"
-    const val JWT_EXPIRATION_MS: Int = 604800000
+
+    @Value("\${jwt.config.secret-key}")
+    lateinit var SECRET: String
+
+    @Value("\${jwt.config.expiration}")
+    lateinit var EXPIRATION: String
+
 
     // generate token
     fun generateToken(authentication: Authentication):String{
         var now = Date()
-        var expiryDate = Date(now.getTime() + JWT_EXPIRATION_MS)
+        var expiryDate = Date(now.time + EXPIRATION.toIntOrNull()!!)
 
         return Jwts.builder()
             .setSubject(authentication.principal as String) // 사용자
             .setIssuedAt(Date()) // 현재 시간 기반으로 생성
             .setExpiration(expiryDate) // 만료 시간 세팅
-            .signWith(SignatureAlgorithm.HS512, JWT_SECRET) // 사용할 암호화 알고리즘, signature에 들어갈 secret 값 세팅
+            .signWith(SignatureAlgorithm.HS512, SECRET) // 사용할 암호화 알고리즘, signature에 들어갈 secret 값 세팅
             .compact()
     }
 
@@ -29,7 +39,7 @@ object JwtTokenProvider {
     // TODO deprecated 확인하기
     fun getUserIdFormJwt(token: String): String? {
         var claims: Claims = Jwts.parser()
-            .setSigningKey(JWT_SECRET)
+            .setSigningKey(SECRET)
             .parseClaimsJws(token)
             .getBody();
 
@@ -39,7 +49,7 @@ object JwtTokenProvider {
     // jwt 유효성 검사
     fun validateToken(token: String?): Boolean{
         try {
-            Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token)
+            Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token)
             return true
         } catch (e: SignatureException) {
             logger.error("Invalid JWT signature: {}", e.message)

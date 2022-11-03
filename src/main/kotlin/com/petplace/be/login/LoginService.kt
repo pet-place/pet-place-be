@@ -16,6 +16,9 @@ class LoginService {
     @Autowired
     private lateinit var userRepository: UserRepository
 
+    @Autowired
+    private lateinit var jwtTokenProvider: JwtTokenProvider
+
     fun loginWithGoogle(idToken: String): LoginResult {
 
         // idToken 검증
@@ -36,7 +39,7 @@ class LoginService {
                 resultUser.id.toString(),
                 null,
                 null)
-            var accessToken: String = JwtTokenProvider.generateToken(authentication)
+            var accessToken: String = jwtTokenProvider.generateToken(authentication)
 
             result = LoginResult(
                 id = resultUser.id!!,

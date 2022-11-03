@@ -15,7 +15,8 @@ import org.springframework.test.context.ActiveProfiles
 @SpringBootTest
 @ActiveProfiles("dev")
 internal class UserTest @Autowired constructor(
-    val userRepository: UserRepository
+    val userRepository: UserRepository,
+    val jwtTokenProvider: JwtTokenProvider
 ){
     @Test
     fun 사용자등록(){
@@ -42,14 +43,13 @@ internal class UserTest @Autowired constructor(
         user.nickname = "테스트"
         user.email = "test@email.com"
 
-
         var userResult = userRepository.save(user)
 
         val authentication: Authentication = UserAuthentication(
             userResult.id.toString(),
             null,
             null)
-        var accessToken: String = JwtTokenProvider.generateToken(authentication)
+        var accessToken: String = jwtTokenProvider.generateToken(authentication)
 
         println("accessToken ::"+accessToken)
     }
