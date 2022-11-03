@@ -16,8 +16,14 @@ class UserService {
 
     fun updateUser(param: UserUpdateParam){
         var user: User = userRepository.findById(param.id).orElseThrow()
-        user.nickname = param.nickName
 
+        if (existByNickname(param)) throw Exception("이미 존재하는 닉네임 입니다.")
+
+        user.nickname = param.nickName
         userRepository.save(user)
+    }
+
+    fun existByNickname(param: UserUpdateParam): Boolean{
+        return userRepository.existsByNickname(param.nickName, param.id)
     }
 }
