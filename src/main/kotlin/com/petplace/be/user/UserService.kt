@@ -1,5 +1,6 @@
 package com.petplace.be.user
 
+import com.petplace.be.constract.ErrorCode
 import com.petplace.be.entity.User
 import com.petplace.be.user.param.UserUpdateParam
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,13 +18,13 @@ class UserService {
     fun updateUser(param: UserUpdateParam){
         var user: User = userRepository.findById(param.id).orElseThrow()
 
-        if (existByNickname(param)) throw Exception("이미 존재하는 닉네임 입니다.")
+        if (existByNickname(param)) throw Exception(ErrorCode.INVALID_ID_TOKEN.message)
 
         user.nickname = param.nickName
         userRepository.save(user)
     }
 
     fun existByNickname(param: UserUpdateParam): Boolean{
-        return userRepository.existsByNickname(param.nickName, param.id)
+        return userRepository.existsByNicknameAndId(param.nickName, param.id)
     }
 }
