@@ -1,6 +1,6 @@
 package com.petplace.be.config.jwt
 
-import org.springframework.beans.factory.annotation.Autowired
+import com.petplace.be.constract.ErrorCode
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.web.filter.OncePerRequestFilter
@@ -17,20 +17,23 @@ class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val jwt:String? = getJwtFromRequest(request)
+        val authorization:String? = getJwtFromRequest(request)
 
-        if (jwt != null && jwtTokenProvider.validateToken(jwt)) {
-            val userId: String? = jwtTokenProvider.getUserIdFormJwt(jwt)
+        if (authorization != null && jwtTokenProvider.validateToken(authorization)) {
+
+            val userId: String? = jwtTokenProvider.getUserIdFormJwt(authorization)
+
             val authentication = UserAuthentication(userId, null, null)
-            authentication.setDetails(WebAuthenticationDetailsSource().buildDetails(request))
-            SecurityContextHolder.getContext().setAuthentication(authentication)
+
+            authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
+            SecurityContextHolder.getContext().authentication = authentication
 
         } else {
-            if (jwt == null) {
-                request.setAttribute("unauthorization", "401 인증키 없음.")
+            if (authorization == null) {
+                request.setAttribute("unauthorization", ErrorCode.NOT_FOUND_TOKEN.message)
             }
-            if (jwtTokenProvider.validateToken(jwt)) {
-                request.setAttribute("unauthorization", "401-001 인증키 만료.")
+            if (jwtTokenProvider.validateToken(authorization)) {
+                request.setAttribute("unauthorization", ErrorCode.ACCESS_TOKEN_EXPIRED.message)
             }
         }
 
@@ -39,7 +42,7 @@ class JwtAuthenticationFilter(
 
     private fun getJwtFromRequest(request: HttpServletRequest): String? {
         var bearerToken: String = request.getHeader("Authorization")
-        if (bearerToken != null && bearerToken.startsWith("Bearer")){
+        if (bearerToken.startsWith("Bearer")){
             return bearerToken.substring("Bearer ".length)
         }
         return null
