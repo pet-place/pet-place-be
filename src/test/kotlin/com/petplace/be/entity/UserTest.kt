@@ -2,13 +2,17 @@ package com.petplace.be.entity
 
 import com.petplace.be.config.jwt.JwtTokenProvider
 import com.petplace.be.config.jwt.UserAuthentication
+import com.petplace.be.constract.ErrorCode
 import com.petplace.be.user.UserRepository
+import com.petplace.be.user.UserService
+import com.petplace.be.user.param.UserUpdateParam
+import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.hamcrest.MatcherAssert.*
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.hamcrest.MatcherAssert.*
-import org.hamcrest.Matchers.*
 import org.springframework.security.core.Authentication
 import org.springframework.test.context.ActiveProfiles
 
@@ -16,6 +20,7 @@ import org.springframework.test.context.ActiveProfiles
 @ActiveProfiles("dev")
 internal class UserTest @Autowired constructor(
     val userRepository: UserRepository,
+    val userService: UserService,
     val jwtTokenProvider: JwtTokenProvider
 ){
     @Test
@@ -54,4 +59,22 @@ internal class UserTest @Autowired constructor(
         println("accessToken ::"+accessToken)
     }
 
+    @Test
+    fun 닉네임_중복테스트(){
+        //given
+        var user = User()
+        user.nickname = "ssyoni"
+        var result = userRepository.save(user)
+
+        var user2 = User()
+        user2.nickname = "ssyoni"
+        var result2 = userRepository.save(user2)
+
+        //when
+        var param = UserUpdateParam(id = result2.id!!, nickName = result.nickname)
+
+        //then
+        assertThrows(IllegalStateException::class.java) { userService.updateUser(param)}
+        assertThatThrownBy(){ userService.updateUser(param)}.hasMessage(ErrorCode.DUPLICATED_NICKNAME.message)
+    }
 }

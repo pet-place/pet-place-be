@@ -18,7 +18,7 @@ class UserService {
     fun updateUser(param: UserUpdateParam){
         var user: User = userRepository.findById(param.id).orElseThrow()
 
-        if (existByNickname(param)) throw Exception(ErrorCode.INVALID_ID_TOKEN.message)
+        if (existByNickname(param)) throw IllegalStateException(ErrorCode.DUPLICATED_NICKNAME.message)
 
         user.nickname = param.nickName
         userRepository.save(user)
