@@ -29,9 +29,12 @@ class LoginService {
 
         // 최초 로그인이면 사용자 저장
         if (isFirstLoginUser(payload)) {
-            var user = User()
-            user.nickname = (payload["name"] as String?)!!
-            user.email = payload.email
+            var user = User(
+                nickname = payload["name"] as String,
+                email = payload.email
+            )
+//            user.nickname =
+//            user.email = payload.email
 
             // TODO access_token 생성 후 저장
             var resultUser: User = userRepository.save(user)
@@ -52,7 +55,7 @@ class LoginService {
             result = LoginResult(
                 id = user.id!!,
                 nickName = user.nickname,
-                accessToken = user.accessToken,
+                accessToken = user.accessToken?: "",
                 isFirstLogin = false
             )
         }
