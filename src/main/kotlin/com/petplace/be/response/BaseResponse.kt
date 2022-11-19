@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 class BaseResponse<T>(
-    val code: String? = null,
-    val message: String? = null,
-    val data: T? = null,
-    val isSuccess: Boolean = true
-)
+    val data: T? = null
+): ErrorResponse() {
+    override var isSuccess: Boolean = true
+}
