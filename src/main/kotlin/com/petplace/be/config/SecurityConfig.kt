@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.builders.WebSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.config.core.GrantedAuthorityDefaults
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
@@ -14,9 +14,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 class SecurityConfig(
-    private val jwtAuthenticationFilter: JwtAuthenticationFilter
-) {
-
+    private val tokenProvider: JwtTokenProvider
+){
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -32,7 +31,7 @@ class SecurityConfig(
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
         // JWT filter 적용
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build()
     }
@@ -41,5 +40,11 @@ class SecurityConfig(
     @Bean
     fun grantedAuthorityDefaults(): GrantedAuthorityDefaults = GrantedAuthorityDefaults("")
 
+    /*
+     * 토큰 필터 설정
+     * */
+    fun jwtAuthenticationFilter(): JwtAuthenticationFilter? {
+        return JwtAuthenticationFilter(tokenProvider)
+    }
 }
 
