@@ -44,6 +44,9 @@ dependencies {
 	implementation("org.apache.commons:commons-lang3:3.12.0")
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor
 	implementation("org.springframework.boot:spring-boot-configuration-processor:2.7.5")
+	// https://mvnrepository.com/artifact/com.auth0/java-jwt
+	implementation("com.auth0:java-jwt:4.2.1")
+
 
 
 
