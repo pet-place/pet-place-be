@@ -2,6 +2,7 @@ package com.petplace.be.controller
 
 import com.petplace.be.login.LoginService
 import com.petplace.be.login.param.LoginParam
+import com.petplace.be.login.param.ReLoginParam
 import com.petplace.be.login.result.LoginResult
 import com.petplace.be.response.BaseResponse
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,6 +18,14 @@ class LoginController {
     @PostMapping("/login/google")
     fun login(@RequestBody param: LoginParam): BaseResponse<LoginResult> {
         val result = loginService.loginWithGoogle(param.idToken)
+
+        return BaseResponse(data = result)
+    }
+
+    @PostMapping("/login/refresh")
+    fun refresh(@RequestBody param: ReLoginParam): BaseResponse<LoginResult>{
+        //
+        var result = loginService.regenerateToken(param);
 
         return BaseResponse(data = result)
     }

@@ -4,5 +4,6 @@ data class LoginResult(
     val id: String,
     val nickName: String,
     val accessToken: String,
-    val isFirstLogin: Boolean
+    val isFirstLogin: Boolean,
+    val refreshToken: String
 )

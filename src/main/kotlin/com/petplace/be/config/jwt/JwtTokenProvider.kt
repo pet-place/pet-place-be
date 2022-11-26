@@ -18,17 +18,30 @@ class JwtTokenProvider {
     @Value("\${jwt.config.secret-key}")
     lateinit var SECRET: String
 
-    @Value("\${jwt.config.expiration}")
-    lateinit var EXPIRATION: String
+    @Value("\${jwt.config.access.expiration}")
+    lateinit var ACCESS_EXPIRATION: String
 
+    @Value("\${jwt.config.refresh.expiration}")
+    lateinit var REFRESH_EXPIRATION: String
 
-    // generate token
-    fun generateToken(authentication: Authentication):String{
+    // generate access token
+    fun generateAccessToken(authentication: Authentication):String{
         var now = Date()
-        var expiryDate = Date(now.time + EXPIRATION.toIntOrNull()!!)
+        var expiryDate = Date(now.time + ACCESS_EXPIRATION.toIntOrNull()!!)
 
         return Jwts.builder()
             .setSubject(authentication.principal as String) // 사용자
+            .setIssuedAt(Date()) // 현재 시간 기반으로 생성
+            .setExpiration(expiryDate) // 만료 시간 세팅
+            .signWith(SignatureAlgorithm.HS512, SECRET) // 사용할 암호화 알고리즘, signature에 들어갈 secret 값 세팅
+            .compact()
+    }
+
+    fun generateRefreshToken(): String{
+        var now = Date()
+        var expiryDate = Date(now.time + REFRESH_EXPIRATION.toIntOrNull()!!)
+
+        return Jwts.builder()
             .setIssuedAt(Date()) // 현재 시간 기반으로 생성
             .setExpiration(expiryDate) // 만료 시간 세팅
             .signWith(SignatureAlgorithm.HS512, SECRET) // 사용할 암호화 알고리즘, signature에 들어갈 secret 값 세팅
