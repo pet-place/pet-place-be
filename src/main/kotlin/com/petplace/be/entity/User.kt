@@ -1,5 +1,6 @@
 package com.petplace.be.entity
 
+import com.petplace.be.user.enum.UserRole
 import lombok.Getter
 import org.hibernate.annotations.GenericGenerator
 import javax.persistence.*
@@ -18,7 +19,8 @@ data class User(
         val profileUrl: String? = null,
         var accessToken: String? = null,
         val phoneNumber: String? = null,
-        var refreshToken: String? = null
+        var refreshToken: String? = null,
+        var role: UserRole? = null
 ){
         fun updateToken(accessToken: String?, refreshToken: String?){
                 this.accessToken = accessToken
