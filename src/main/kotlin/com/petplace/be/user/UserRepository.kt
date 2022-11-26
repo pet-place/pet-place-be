@@ -15,4 +15,6 @@ interface UserRepository : JpaRepository<User, String> {
     fun existsByNickname(@Param("nickName") nickName: String): Boolean
 
     fun findByEmail(email: String): Optional<User>
+
+    fun findByRefreshToken(refreshToken: String): Optional<User>
 }
