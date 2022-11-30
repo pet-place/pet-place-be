@@ -7,7 +7,7 @@ import javax.persistence.Column
 import javax.persistence.MappedSuperclass
 
 @MappedSuperclass
-data class BaseEntity(
+class BaseEntity(
         @CreatedBy
         @Column(updatable = false)
         private var createdBy: String,
