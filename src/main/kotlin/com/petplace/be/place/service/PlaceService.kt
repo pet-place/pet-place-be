@@ -1,6 +1,9 @@
 package com.petplace.be.place.service
 
+import com.petplace.be.constract.ErrorCode
 import com.petplace.be.entity.Place
+import com.petplace.be.exception.CommonException
+import com.petplace.be.place.PlaceResult
 import com.petplace.be.place.PlaceSaveParam
 import com.petplace.be.place.PlaceSaveResult
 import com.petplace.be.place.repository.PlaceRepository
@@ -21,6 +24,21 @@ class PlaceService(
 
         return PlaceSaveResult(
             id = placeId!!
+        )
+    }
+
+    /* 플레이스 조회*/
+    fun findById(id: Long): PlaceResult {
+        val place = placeRepository.findById(id)
+            .orElseThrow {throw CommonException(ErrorCode.NOT_FOUND_PLACE)}
+
+        return PlaceResult(
+            id = place.id!!,
+            name = place.name,
+            description = place.description,
+            pets = place.pets,
+            createdAt = place.createAt(),
+            updatedAt = place.updateAt()
         )
     }
 
