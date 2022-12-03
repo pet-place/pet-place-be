@@ -1,5 +1,6 @@
 package com.petplace.be.entity
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import com.petplace.be.entity.base.BaseEntity
 import com.petplace.be.pet.Gender
 import javax.persistence.*
@@ -7,7 +8,7 @@ import javax.persistence.*
 @Entity
 class Pet(
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
     val name: String,               // 이름
@@ -20,6 +21,7 @@ class Pet(
     var disliked: String,            // 싫어하는 것
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "place_id")
     var place: Place
 ) : BaseEntity()
