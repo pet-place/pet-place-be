@@ -16,8 +16,5 @@ class UserPlaceGroup(
 
     @ManyToOne
     @JoinColumn(name = "place_id")
-    var place: Place,
-
-    override var createAt: LocalDateTime,
-    override var updateAt: LocalDateTime
-): BaseTimeEntity(createAt, updateAt)
+    var place: Place
+): BaseTimeEntity()

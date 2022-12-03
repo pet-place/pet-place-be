@@ -24,10 +24,5 @@ class Pet(
 
     @ManyToOne
     @JoinColumn(name = "place_id")
-    var place: Place,
-
-    createdBy: String,
-    modifiedBy: String,
-    createAt: LocalDateTime,
-    updateAt: LocalDateTime
-) : BaseEntity(createdBy, modifiedBy, createAt, updateAt)
+    var place: Place
+) : BaseEntity()

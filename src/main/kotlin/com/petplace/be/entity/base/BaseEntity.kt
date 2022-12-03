@@ -7,14 +7,11 @@ import javax.persistence.Column
 import javax.persistence.MappedSuperclass
 
 @MappedSuperclass
-class BaseEntity(
+class BaseEntity: BaseTimeEntity() {
         @CreatedBy
         @Column(updatable = false)
-        private var createdBy: String,
+        protected lateinit var createdBy: String
 
         @LastModifiedBy
-        private var modifiedBy: String,
-        override var createAt: LocalDateTime,
-        override var updateAt: LocalDateTime
-): BaseTimeEntity(createAt, updateAt) {
+        protected lateinit var modifiedBy: String
 }

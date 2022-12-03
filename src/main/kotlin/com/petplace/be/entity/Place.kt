@@ -1,6 +1,7 @@
 package com.petplace.be.entity
 
 import com.petplace.be.entity.base.BaseEntity
+import com.petplace.be.entity.base.BaseTimeEntity
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -16,9 +17,4 @@ class Place(
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "place")
     var pets: MutableList<Pet> = mutableListOf(),   // 플레이스 소속 반려동물들
-
-    createdBy: String,
-    modifiedBy: String,
-    createAt: LocalDateTime,
-    updateAt: LocalDateTime
-) : BaseEntity(createdBy, modifiedBy, createAt, updateAt)
+) : BaseTimeEntity()
