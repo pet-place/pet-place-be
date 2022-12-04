@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import kotlin.script.experimental.jvm.util.KotlinJars.stdlib
 
 plugins {
 	id("org.springframework.boot") version "2.7.4"
@@ -55,7 +54,7 @@ dependencies {
 
 
 
-
+	runtimeOnly("com.h2database:h2")
 	runtimeOnly("mysql:mysql-connector-java")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
