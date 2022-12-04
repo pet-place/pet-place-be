@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletResponse
 class ApiGlobalExceptionHandler {
     @ExceptionHandler
     fun exceptionHandler(request: HttpServletRequest, response: HttpServletResponse, ex: Exception): ErrorResponse {
-        val errorCode = if(ex is CommonException) {
+        ex.printStackTrace()
+        val errorCode = if (ex is CommonException) {
+            println("test1")
             ex.errorCode
         } else {
             ErrorCode.UNKNOWN

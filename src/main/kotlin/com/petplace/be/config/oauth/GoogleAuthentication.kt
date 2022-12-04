@@ -17,7 +17,11 @@ class GoogleAuthentication {
                     //TODO property 로 빼기
                     .setAudience(listOf("663371736991-3gjbva9d64mplielt3m14ji527q4ihad.apps.googleusercontent.com"))
                     .build()
-            return verifier.verify(idToken)
+            return try {
+                verifier.verify(idToken)
+            } catch (e: Exception) {
+                null
+            }
         }
     }
 }

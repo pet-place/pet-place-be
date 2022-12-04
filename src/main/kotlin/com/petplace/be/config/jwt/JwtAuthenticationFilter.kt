@@ -32,7 +32,7 @@ class JwtAuthenticationFilter(
             if (authorization == null) {
                 request.setAttribute("unauthorization", ErrorCode.NOT_FOUND_TOKEN.message)
             }
-            if (jwtTokenProvider.validateToken(authorization)) {
+            if (authorization != null && jwtTokenProvider.validateToken(authorization)) {
                 request.setAttribute("unauthorization", ErrorCode.ACCESS_TOKEN_EXPIRED.message)
             }
         }
@@ -41,7 +41,7 @@ class JwtAuthenticationFilter(
     }
 
     private fun getJwtFromRequest(request: HttpServletRequest): String? {
-        var bearerToken: String = request.getHeader("Authorization")
+        val bearerToken: String = request.getHeader("Authorization") ?: return null
         if (bearerToken.startsWith("Bearer")){
             return bearerToken.substring("Bearer ".length)
         }
