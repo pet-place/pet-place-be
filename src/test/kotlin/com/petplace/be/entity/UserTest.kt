@@ -1,9 +1,10 @@
 package com.petplace.be.entity
 
-import com.petplace.be.config.jwt.JwtTokenProvider
-import com.petplace.be.config.jwt.UserAuthentication
-import com.petplace.be.user.UserRepository
-import com.petplace.be.user.UserService
+import com.petplace.be.auth.domain.JwtTokenProvider
+import com.petplace.be.auth.domain.UserAuthentication
+import com.petplace.be.user.domain.User
+import com.petplace.be.user.repository.UserRepository
+import com.petplace.be.user.service.UserService
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.Test
@@ -47,7 +48,7 @@ internal class UserTest @Autowired constructor(
         var userResult = userRepository.save(user)
 
         val authentication: Authentication = UserAuthentication(
-            userResult.id.toString(),
+            userResult.id,
             null,
             null)
         var accessToken: String = jwtTokenProvider.generateAccessToken(authentication)

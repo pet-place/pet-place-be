@@ -1,7 +1,7 @@
 package com.petplace.be.config
 
-import com.petplace.be.config.jwt.JwtAuthenticationFilter
-import com.petplace.be.config.jwt.JwtTokenProvider
+import com.petplace.be.auth.filter.JwtAuthenticationFilter
+import com.petplace.be.auth.filter.JwtExceptionHandlerFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
@@ -18,7 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 class SecurityConfig(
-    private val tokenProvider: JwtTokenProvider
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
+    private val jwtExceptionHandlerFilter: JwtExceptionHandlerFilter
 ) {
     @Bean
     fun ignoringCustomizer(): WebSecurityCustomizer? {
@@ -27,30 +28,16 @@ class SecurityConfig(
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain? {
-//        http.authorizeRequests()
-//            .antMatchers("/login/**").permitAll()
-//            .and()
-//            .formLogin().disable()
-//            .httpBasic().disable()
-//            .csrf().disable()
-//
-//        // Spring Security에서 session을 생성하거나 사용하지 않도록 설정
-//        http.sessionManagement()
-//            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//
-//        // JWT filter 적용
-//        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter::class.java)
-//
-//        return http.build()
         return http
             .csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .formLogin().disable()
             .httpBasic().disable()
-            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(jwtExceptionHandlerFilter, JwtAuthenticationFilter::class.java)
             .authorizeRequests()
-            .antMatchers("/login/**", "/user/sign-up/**").permitAll()
+            .antMatchers("/auth/**", "/user/sign-up/**").permitAll()
             .and()
             .authorizeRequests()
             .anyRequest().authenticated()
@@ -62,11 +49,4 @@ class SecurityConfig(
     @Bean
     fun grantedAuthorityDefaults(): GrantedAuthorityDefaults = GrantedAuthorityDefaults("")
 
-    /*
-     * 토큰 필터 설정
-     * */
-    private fun jwtAuthenticationFilter(): JwtAuthenticationFilter {
-        return JwtAuthenticationFilter(tokenProvider)
-    }
 }
-
