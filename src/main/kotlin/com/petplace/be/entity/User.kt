@@ -19,5 +19,5 @@ class User(
         val phoneNumber: String? = null,
 
         @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-        var userPlaceGroups: MutableList<UserPlaceGroup> = mutableListOf()
+        var placeUserGroups: MutableList<PlaceUserGroup> = mutableListOf()
 )

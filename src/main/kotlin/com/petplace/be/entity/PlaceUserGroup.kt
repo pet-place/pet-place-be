@@ -1,11 +1,10 @@
 package com.petplace.be.entity
 
 import com.petplace.be.entity.base.BaseTimeEntity
-import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-class UserPlaceGroup(
+class PlaceUserGroup(
     @Id
     @GeneratedValue
     var id: Long? = null,
