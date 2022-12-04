@@ -44,6 +44,8 @@ dependencies {
 	implementation("org.apache.commons:commons-lang3:3.12.0")
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor
 	implementation("org.springframework.boot:spring-boot-configuration-processor:2.7.5")
+// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
+	implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
 
 
 
@@ -74,3 +76,5 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+
