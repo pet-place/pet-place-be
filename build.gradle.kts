@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import kotlin.script.experimental.jvm.util.KotlinJars.stdlib
 
 plugins {
 	id("org.springframework.boot") version "2.7.4"
@@ -21,7 +20,7 @@ repositories {
 }
 
 dependencies {
-//	implementation(project(":common"))
+	// implementation(project(":common"))
 
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -44,17 +43,12 @@ dependencies {
 	implementation("org.apache.commons:commons-lang3:3.12.0")
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor
 	implementation("org.springframework.boot:spring-boot-configuration-processor:2.7.5")
-// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
+	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
 	implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
+	// https://mvnrepository.com/artifact/com.auth0/java-jwt
+	implementation("com.auth0:java-jwt:4.2.1")
 
-
-
-
-
-
-
-
-
+	runtimeOnly("com.h2database:h2")
 	runtimeOnly("mysql:mysql-connector-java")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
@@ -76,5 +70,3 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
-
-

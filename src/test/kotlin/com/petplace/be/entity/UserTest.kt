@@ -1,14 +1,15 @@
 package com.petplace.be.entity
 
-import com.petplace.be.config.jwt.JwtTokenProvider
-import com.petplace.be.config.jwt.UserAuthentication
-import com.petplace.be.user.UserRepository
-import org.junit.jupiter.api.Assertions.*
+import com.petplace.be.auth.domain.JwtTokenProvider
+import com.petplace.be.auth.domain.UserAuthentication
+import com.petplace.be.user.domain.User
+import com.petplace.be.user.repository.UserRepository
+import com.petplace.be.user.service.UserService
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.hamcrest.MatcherAssert.*
-import org.hamcrest.Matchers.*
 import org.springframework.security.core.Authentication
 import org.springframework.test.context.ActiveProfiles
 
@@ -16,6 +17,7 @@ import org.springframework.test.context.ActiveProfiles
 @ActiveProfiles("dev")
 internal class UserTest @Autowired constructor(
     val userRepository: UserRepository,
+    val userService: UserService,
     val jwtTokenProvider: JwtTokenProvider
 ){
     @Test
@@ -46,12 +48,30 @@ internal class UserTest @Autowired constructor(
         var userResult = userRepository.save(user)
 
         val authentication: Authentication = UserAuthentication(
-            userResult.id.toString(),
+            userResult.id,
             null,
             null)
-        var accessToken: String = jwtTokenProvider.generateToken(authentication)
+        var accessToken: String = jwtTokenProvider.generateAccessToken(authentication)
 
         println("accessToken ::"+accessToken)
     }
 
+//    @Test
+//    fun 닉네임_중복테스트(){
+//        //given
+//        var user = User()
+//        user.nickname = "ssyoni"
+//        var result = userRepository.save(user)
+//
+//        var user2 = User()
+//        user2.nickname = "ssyoni"
+//        var result2 = userRepository.save(user2)
+//
+//        //when
+//        var param = UserUpdateParam(id = result2.id!!, nickName = result.nickname ?: "")
+//
+//        //then
+//        assertThrows(IllegalStateException::class.java) { userService.updateUser(param)}
+//        assertThatThrownBy(){ userService.updateUser(param)}.hasMessage(ErrorCode.DUPLICATED_NICKNAME.message)
+//    }
 }
