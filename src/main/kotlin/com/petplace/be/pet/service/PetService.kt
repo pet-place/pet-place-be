@@ -1,8 +1,8 @@
 package com.petplace.be.pet.service
 
-import com.petplace.be.constract.ErrorCode
+import com.petplace.be.common.enums.ErrorCode
+import com.petplace.be.common.exception.CommonException
 import com.petplace.be.entity.Pet
-import com.petplace.be.exception.CommonException
 import com.petplace.be.pet.PetSaveParam
 import com.petplace.be.pet.repository.PetRepository
 import com.petplace.be.place.repository.PlaceRepository
@@ -17,7 +17,7 @@ class PetService(
     fun savePet(param: PetSaveParam){
         //place 조회
         val savedPlace = placeRepository.findById(param.placeId)
-            .orElseThrow {throw CommonException(ErrorCode.NOT_FOUND_PLACE)}
+            .orElseThrow {throw CommonException(ErrorCode.PLACE_NOT_FOUND) }
 
         //pet 저장
         val pet = Pet(

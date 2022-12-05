@@ -1,7 +1,7 @@
 package com.petplace.be.auth.domain
 
-import com.petplace.be.common.ErrorCode
-import com.petplace.be.exception.CommonException
+import com.petplace.be.common.enums.ErrorCode
+import com.petplace.be.common.exception.CommonException
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MalformedJwtException

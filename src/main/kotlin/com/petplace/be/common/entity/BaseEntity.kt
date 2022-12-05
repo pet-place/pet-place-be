@@ -1,8 +1,7 @@
-package com.petplace.be.entity.base
+package com.petplace.be.common.entity
 
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.annotation.LastModifiedBy
-import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.MappedSuperclass
 

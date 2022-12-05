@@ -1,6 +1,6 @@
-package com.petplace.be.exception
+package com.petplace.be.common.exception
 
-import com.petplace.be.common.ErrorCode
+import com.petplace.be.common.enums.ErrorCode
 
 class CommonException : RuntimeException {
     val errorCode: ErrorCode

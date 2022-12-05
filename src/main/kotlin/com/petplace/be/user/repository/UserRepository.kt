@@ -9,12 +9,8 @@ import java.util.*
 
 @Repository
 interface UserRepository : JpaRepository<User, Long> {
-    fun existsByEmail(email: String): Boolean
-
     @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM User u where u.nickname = :nickName")
     fun existsByNickname(@Param("nickName") nickName: String): Boolean
 
     fun findByEmail(email: String): Optional<User>
-
-    fun findByRefreshToken(refreshToken: String): Optional<User>
 }

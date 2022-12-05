@@ -1,6 +1,6 @@
-package com.petplace.be.exception
+package com.petplace.be.common.exception
 
-import com.petplace.be.common.ErrorResponse
+import com.petplace.be.common.response.ErrorResponse
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import javax.servlet.http.HttpServletRequest

@@ -1,7 +1,7 @@
 package com.petplace.be.entity
 
 import com.fasterxml.jackson.annotation.JsonBackReference
-import com.petplace.be.entity.base.BaseEntity
+import com.petplace.be.common.entity.BaseEntity
 import com.petplace.be.pet.Gender
 import javax.persistence.*
 

@@ -1,6 +1,6 @@
 package com.petplace.be.user.domain
 
-import com.petplace.be.user.domain.enums.UserRole
+import com.petplace.be.entity.PlaceUserGroup
 import javax.persistence.*
 
 @Entity
@@ -28,14 +28,6 @@ class User(
     @Column(name = "phone_number")
     val phoneNumber: String? = null,
 
-    @Column(name = "refresh_token")
-    var refreshToken: String? = null,
-
-    @Column(name = "user_role")
-    var userRole: UserRole? = null
-) {
-    fun updateToken(accessToken: String?, refreshToken: String?) {
-        this.accessToken = accessToken
-        this.refreshToken = refreshToken
-    }
-}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    var placeUserGroups: MutableList<PlaceUserGroup> = mutableListOf()
+)

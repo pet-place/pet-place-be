@@ -1,13 +1,11 @@
 package com.petplace.be.auth.service
 
-import com.auth0.jwt.JWT
-import com.auth0.jwt.interfaces.DecodedJWT
 import com.petplace.be.auth.domain.JwtTokenProvider
 import com.petplace.be.auth.domain.UserAuthentication
 import com.petplace.be.auth.dto.SignInResult
 import com.petplace.be.auth.external.GoogleAuthentication
-import com.petplace.be.common.ErrorCode
-import com.petplace.be.exception.CommonException
+import com.petplace.be.common.enums.ErrorCode
+import com.petplace.be.common.exception.CommonException
 import com.petplace.be.user.repository.UserRepository
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
@@ -87,18 +85,4 @@ class AuthService(
 //            refreshToken = user.refreshToken!!,
 //        )
 //    }
-
-    fun getExpireTimeRemaining(refreshToken: String): String {
-        var decodedJwt: DecodedJWT = JWT.decode(refreshToken)
-        var now = System.currentTimeMillis()
-        val refreshExpireTime: Long = decodedJwt.getClaim("exp").asLong() * 1000
-        var diffDays = (refreshExpireTime - now) / 1000 / (24 * 3600)
-
-        // 남은 만료 기간이 3일 이하면
-        if (diffDays < 3) {
-            return jwtTokenProvider.generateRefreshToken()
-        }
-
-        return refreshToken
-    }
 }

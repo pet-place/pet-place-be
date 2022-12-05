@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class SwaggerConfig {
-
     @Bean
     fun openAPI(@Value("\${springdoc.version}") springdocVersion: String?): OpenAPI? {
         val info = io.swagger.v3.oas.models.info.Info()

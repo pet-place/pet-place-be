@@ -3,8 +3,8 @@ package com.petplace.be.user.service
 import com.petplace.be.auth.domain.JwtTokenProvider
 import com.petplace.be.auth.domain.UserAuthentication
 import com.petplace.be.auth.external.GoogleAuthentication
-import com.petplace.be.common.ErrorCode
-import com.petplace.be.exception.CommonException
+import com.petplace.be.common.enums.ErrorCode
+import com.petplace.be.common.exception.CommonException
 import com.petplace.be.user.domain.User
 import com.petplace.be.user.dto.SignUpResult
 import com.petplace.be.user.repository.UserRepository

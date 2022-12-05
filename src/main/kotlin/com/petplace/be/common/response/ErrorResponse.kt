@@ -1,6 +1,7 @@
-package com.petplace.be.common
+package com.petplace.be.common.response
 
-import com.petplace.be.exception.CommonException
+import com.petplace.be.common.enums.ErrorCode
+import com.petplace.be.common.exception.CommonException
 
 open class ErrorResponse (
     val code: String?,

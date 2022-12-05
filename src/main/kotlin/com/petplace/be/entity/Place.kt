@@ -1,9 +1,7 @@
 package com.petplace.be.entity
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
-import com.petplace.be.entity.base.BaseEntity
-import com.petplace.be.entity.base.BaseTimeEntity
-import java.time.LocalDateTime
+import com.petplace.be.common.entity.BaseTimeEntity
 import javax.persistence.*
 
 @Entity

@@ -1,6 +1,6 @@
 package com.petplace.be.user.controller
 
-import com.petplace.be.common.BaseResponse
+import com.petplace.be.common.response.BaseResponse
 import com.petplace.be.user.dto.SignUpParam
 import com.petplace.be.user.dto.SignUpResult
 import com.petplace.be.user.service.UserService

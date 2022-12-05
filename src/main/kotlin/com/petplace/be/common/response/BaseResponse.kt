@@ -1,4 +1,4 @@
-package com.petplace.be.common
+package com.petplace.be.common.response
 
 import com.fasterxml.jackson.annotation.JsonInclude
 

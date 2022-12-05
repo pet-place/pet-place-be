@@ -3,7 +3,7 @@ package com.petplace.be.auth.controller
 import com.petplace.be.auth.dto.SignInParam
 import com.petplace.be.auth.dto.SignInResult
 import com.petplace.be.auth.service.AuthService
-import com.petplace.be.common.BaseResponse
+import com.petplace.be.common.response.BaseResponse
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping

@@ -1,7 +1,7 @@
 package com.petplace.be.auth.filter
 
-import com.petplace.be.common.ErrorResponse
-import com.petplace.be.exception.CommonException
+import com.petplace.be.common.exception.CommonException
+import com.petplace.be.common.response.ErrorResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
