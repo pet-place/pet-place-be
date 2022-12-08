@@ -4,6 +4,7 @@ import com.petplace.be.common.response.BaseResponse
 import com.petplace.be.user.dto.SignUpParam
 import com.petplace.be.user.dto.SignUpResult
 import com.petplace.be.user.service.UserService
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*
 class UserController(
     private val userService: UserService
 ) {
+    @Operation(summary = "회원가입", description = "")
     @PostMapping("/sign-up")
     fun signUp(@RequestBody signUpParam: SignUpParam): BaseResponse<SignUpResult> {
         return BaseResponse(userService.signUp(signUpParam.googleIdToken, signUpParam.nickname))
