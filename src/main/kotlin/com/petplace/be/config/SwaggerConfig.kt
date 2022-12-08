@@ -32,11 +32,21 @@ class SwaggerConfig {
     }
 
     @Bean
-    fun petPAI(): GroupedOpenApi {
+    fun petAPI(): GroupedOpenApi {
         val paths = arrayOf("/pets/**")
 
         return GroupedOpenApi.builder()
             .group("펫 API")
+            .pathsToMatch(*paths)
+            .build()
+    }
+
+    @Bean
+    fun userAPI(): GroupedOpenApi {
+        val paths = arrayOf("/user/**")
+
+        return GroupedOpenApi.builder()
+            .group("사용자 API")
             .pathsToMatch(*paths)
             .build()
     }
