@@ -11,7 +11,7 @@ class PlaceUserGroup(
     var id: Long? = null,
 
     @ManyToOne
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "pp_users_id")
     var user: User,
 
     @ManyToOne
