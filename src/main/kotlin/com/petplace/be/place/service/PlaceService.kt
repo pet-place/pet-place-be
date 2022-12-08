@@ -3,9 +3,11 @@ package com.petplace.be.place.service
 import com.petplace.be.common.enums.ErrorCode
 import com.petplace.be.common.exception.CommonException
 import com.petplace.be.entity.Place
-import com.petplace.be.place.PlaceResult
-import com.petplace.be.place.PlaceSaveParam
-import com.petplace.be.place.PlaceSaveResult
+import com.petplace.be.place.dto.result.PlaceResult
+import com.petplace.be.place.dto.param.PlaceSaveParam
+import com.petplace.be.place.dto.param.PlaceUpdateParam
+import com.petplace.be.place.dto.result.PlaceSaveResult
+import com.petplace.be.place.dto.result.PlaceUpdateResult
 import com.petplace.be.place.repository.PlaceRepository
 import org.springframework.stereotype.Service
 
@@ -29,17 +31,28 @@ class PlaceService(
 
     /* 플레이스 조회*/
     fun findById(id: Long): PlaceResult {
-        val place = placeRepository.findById(id)
-            .orElseThrow {throw CommonException(ErrorCode.PLACE_NOT_FOUND) }
+        val place = findPlaceById(id)
 
         return PlaceResult(
             id = place.id!!,
             name = place.name,
             description = place.description,
-            pets = place.pets,
-            createdAt = place.createAt(),
-            updatedAt = place.updateAt()
+            pets = place.pets
         )
     }
+
+    /* 플레이스 수정 */
+    fun updatePlace(param: PlaceUpdateParam): PlaceUpdateResult{
+        var place = findPlaceById(param.id)
+        place.update(param.name, param.description, param.description)
+        val updatedPlace = placeRepository.save(place)
+
+        return PlaceUpdateResult.generateFrom(updatedPlace)
+    }
+
+    private fun findPlaceById(id: Long): Place{
+        return placeRepository.findById(id).orElseThrow {throw CommonException(ErrorCode.PLACE_NOT_FOUND) }
+    }
+
 
 }
