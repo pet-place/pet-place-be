@@ -1,4 +1,4 @@
-package com.petplace.be.place
+package com.petplace.be.place.dto.param
 
 data class PlaceSaveParam(
     var name:String,
