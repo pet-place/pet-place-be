@@ -28,7 +28,7 @@ class Place(
         if (description != null) {
             this.description = description
         }
-        this.profileUrl = description
+        this.profileUrl = profileUrl
     }
 
     fun delete(){

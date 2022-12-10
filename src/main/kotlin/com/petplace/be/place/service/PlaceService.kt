@@ -54,8 +54,13 @@ class PlaceService(
     /* 플레이스 수정 */
     @Transactional
     fun updatePlace(param: PlaceUpdateParam): PlaceUpdateResult{
+        var uploadedUrl: String = ""
+        if (param.profileImage != null) {
+            uploadedUrl = s3Client.upload(param.profileImage!!)
+        }
+
         var place = findPlaceById(param.id)
-        place.update(param.name, param.description, param.description)
+        place.update(param.name, param.description, uploadedUrl)
 
         return PlaceUpdateResult.generateFrom(place)
     }
