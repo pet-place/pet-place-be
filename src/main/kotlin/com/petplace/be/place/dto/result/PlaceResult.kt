@@ -8,7 +8,7 @@ data class PlaceResult(
     val id: Long,
     val name: String,
     val description: String,
-    //val profileUrl: String,
+    val profileUrl: String?,
     val pets: MutableList<Pet>
 ){
     companion object {
@@ -17,6 +17,7 @@ data class PlaceResult(
                 id = place.id!!,
                 name = place.name,
                 description = place.description,
+                profileUrl = place.profileUrl,
                 pets = place.pets
             )
         }

@@ -19,7 +19,7 @@ class PlaceController(
 ) {
     @Operation(summary = "플레이스 등록", description = "플레이스가 등록됩니다.")
     @PostMapping
-    fun createPlace(@RequestBody param: PlaceSaveParam): BaseResponse<PlaceSaveResult> {
+    fun createPlace(param: PlaceSaveParam): BaseResponse<PlaceSaveResult> {
         val response = placeService.savePlace(param);
         return BaseResponse(response);
     }
