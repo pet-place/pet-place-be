@@ -37,4 +37,13 @@ class PlaceController(
         val response = placeService.updatePlace(param);
         return BaseResponse(response);
     }
+
+    @Operation(summary = "플레이스 삭제", description = "유저가 가입된 플레이스 리스트를 조회합니다.")
+    @DeleteMapping("/{id}")
+    fun findByIdAndUser(@PathVariable id: Long): BaseResponse<Void> {
+        val response = placeService.deletePlace(id);
+        return BaseResponse();
+    }
+
+
 }

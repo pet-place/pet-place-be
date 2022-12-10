@@ -10,6 +10,7 @@ import com.petplace.be.place.dto.result.PlaceSaveResult
 import com.petplace.be.place.dto.result.PlaceUpdateResult
 import com.petplace.be.place.repository.PlaceRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class PlaceService(
@@ -42,12 +43,19 @@ class PlaceService(
     }
 
     /* 플레이스 수정 */
+    @Transactional
     fun updatePlace(param: PlaceUpdateParam): PlaceUpdateResult{
         var place = findPlaceById(param.id)
         place.update(param.name, param.description, param.description)
-        val updatedPlace = placeRepository.save(place)
 
-        return PlaceUpdateResult.generateFrom(updatedPlace)
+        return PlaceUpdateResult.generateFrom(place)
+    }
+
+    /* 플레이스 삭제 */
+    @Transactional
+    fun deletePlace(id: Long){
+        var place = findPlaceById(id);
+        place.delete()
     }
 
     private fun findPlaceById(id: Long): Place{
