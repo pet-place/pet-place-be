@@ -44,6 +44,11 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-configuration-processor:2.7.5")
 	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
 	implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
+	// https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-bom
+	implementation("com.amazonaws:aws-java-sdk-bom:1.12.361")
+	// https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3
+	implementation("com.amazonaws:aws-java-sdk-s3:1.12.361")
+
 
 	runtimeOnly("com.h2database:h2")
 	runtimeOnly("mysql:mysql-connector-java")
