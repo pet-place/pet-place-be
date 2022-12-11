@@ -1,13 +1,12 @@
 package com.petplace.be.auth.controller
 
+import com.petplace.be.auth.dto.RefreshAccessTokenParam
+import com.petplace.be.auth.dto.RefreshAccessTokenResult
 import com.petplace.be.auth.dto.SignInParam
 import com.petplace.be.auth.dto.SignInResult
 import com.petplace.be.auth.service.AuthService
 import com.petplace.be.common.response.BaseResponse
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/auth")
@@ -20,10 +19,9 @@ class AuthController(
         return BaseResponse(result)
     }
 
-    // TODO :: refresh token 로직 구현
-//    @PostMapping("/refresh")
-//    fun refresh(@RequestBody param: ReLoginParam): BaseResponse<LoginResult> {
-//        var result = loginService.regenerateToken(param);
-//        return BaseResponse(data = result)
-//    }
+    @PutMapping("/access-token")
+    fun refreshAccessToken(@RequestBody refreshAccessTokenParam: RefreshAccessTokenParam): BaseResponse<RefreshAccessTokenResult> {
+        val result = authService.refreshAccessToken(refreshAccessTokenParam.refreshToken)
+        return BaseResponse(result)
+    }
 }
