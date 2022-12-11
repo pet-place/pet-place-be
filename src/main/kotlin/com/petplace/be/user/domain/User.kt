@@ -11,7 +11,7 @@ class User(
     val id: Long? = 0L,
 
     @Column(name = "provider_id")
-    val providerId: String? = null,
+    var providerId: String? = null,
 
     @Column(name = "nickname")
     var nickname: String? = null,
@@ -20,13 +20,13 @@ class User(
     var email: String? = null,
 
     @Column(name = "profile_url")
-    val profileUrl: String? = null,
+    var profileUrl: String? = null,
 
-    @Column(name = "access_token")
-    var accessToken: String? = null,
+    @Column(name = "refresh_token")
+    var refreshToken: String? = null,
 
     @Column(name = "phone_number")
-    val phoneNumber: String? = null,
+    var phoneNumber: String? = null,
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     var placeUserGroups: MutableList<PlaceUserGroup> = mutableListOf()

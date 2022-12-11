@@ -1,7 +1,6 @@
 package com.petplace.be.entity
 
 import com.petplace.be.auth.domain.JwtTokenProvider
-import com.petplace.be.auth.domain.UserAuthentication
 import com.petplace.be.user.domain.User
 import com.petplace.be.user.repository.UserRepository
 import com.petplace.be.user.service.UserService
@@ -10,7 +9,6 @@ import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.security.core.Authentication
 import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
@@ -41,18 +39,11 @@ internal class UserTest @Autowired constructor(
     @Test
     fun 토큰생성(){
         //given
-        var user = User()
+        val user = User()
         user.nickname = "테스트"
         user.email = "test@email.com"
-
-        var userResult = userRepository.save(user)
-
-        val authentication: Authentication = UserAuthentication(
-            userResult.id,
-            null,
-            null)
-        var accessToken: String = jwtTokenProvider.generateAccessToken(authentication)
-
+        val userResult = userRepository.save(user)
+        val accessToken: String = jwtTokenProvider.issueAccessToken(userResult.id!!)
         println("accessToken ::"+accessToken)
     }
 

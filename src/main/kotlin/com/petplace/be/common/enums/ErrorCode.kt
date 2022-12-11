@@ -16,5 +16,7 @@ enum class ErrorCode(val code: String, val message: String) {
     UNSUPPORTED_JWT("UNSUPPORTED_JWT", "지원되지 않는 형식의 JWT입니다."),
     NO_JTW_CLAIM("NO_JTW_CLAIM", "존재하지 않는 JWT claim을 조회하였습니다."),
 
+    REFRESH_TOKEN_NOT_MATCHED("REFRESH_TOKEN_NOT_MATCHED", "리프레시 토큰이 사용자 정보와 일치하지 않습니다."),
+
     PLACE_NOT_FOUND("PLACE_NOT_FOUND", "플레이스가 존재하지 않습니다."),
 }

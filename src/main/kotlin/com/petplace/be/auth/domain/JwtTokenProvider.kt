@@ -9,7 +9,6 @@ import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
 import java.security.Key
 import java.security.SignatureException
@@ -31,35 +30,31 @@ class JwtTokenProvider {
     val KEY: Key by lazy { Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET)) }
 
     // generate access token
-    fun generateAccessToken(authentication: Authentication): String {
+    fun issueAccessToken(userId: Long): String {
         val now = LocalDateTime.now()
         val expiryDate = now.plusSeconds(ACCESS_EXPIRATION.toLong())
-
-        return Jwts.builder()
-            .setSubject(authentication.principal.toString()) // 사용자
-            .setIssuedAt(Date.from(now.atZone(ZoneId.systemDefault()).toInstant())) // 현재 시간 기반으로 생성
-            .setExpiration(Date.from(expiryDate.atZone(ZoneId.systemDefault()).toInstant())) // 만료 시간 세팅
-            .signWith(KEY) // 사용할 암호화 알고리즘, signature에 들어갈 secret 값 세팅
-            .compact()
+        return issueToken(userId.toString(), now, expiryDate)
     }
 
-    fun generateRefreshToken(): String {
+    fun issueRefreshToken(userId: Long): String {
         val now = LocalDateTime.now()
         val expiryDate = now.plusSeconds(REFRESH_EXPIRATION.toLong())
+        return issueToken(userId.toString(), now, expiryDate)
+    }
 
+    private fun issueToken(userId: String, now: LocalDateTime, expiryDate: LocalDateTime): String {
         return Jwts.builder()
+            .setSubject(userId) // 사용자 아이디
             .setIssuedAt(Date.from(now.atZone(ZoneId.systemDefault()).toInstant())) // 현재 시간 기반으로 생성
             .setExpiration(Date.from(expiryDate.atZone(ZoneId.systemDefault()).toInstant())) // 만료 시간 세팅
             .signWith(KEY) // 사용할 암호화 알고리즘, signature에 들어갈 secret 값 세팅
             .compact()
     }
 
-    // get User Id
     fun getUserIdFromToken(token: String): String? {
         return Jwts.parserBuilder().setSigningKey(KEY).build().parseClaimsJws(token).body.subject
     }
 
-    // jwt 유효성 검사
     fun validateToken(token: String?) {
         try {
             Jwts.parserBuilder().setSigningKey(KEY).build().parseClaimsJws(token).body.subject
