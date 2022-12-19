@@ -4,6 +4,7 @@ import com.petplace.be.common.entity.BaseEntity
 import javax.persistence.*
 
 @Entity
+@Table(name = "pp_story_comment")
 class StoryComment(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

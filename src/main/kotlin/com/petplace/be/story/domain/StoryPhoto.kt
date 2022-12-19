@@ -4,6 +4,7 @@ import com.petplace.be.common.entity.BaseEntity
 import javax.persistence.*
 
 @Entity
+@Table(name = "pp_story_photo")
 class StoryPhoto(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,6 +13,6 @@ class StoryPhoto(
     @Column(name = "story_id")
     val storyId: Long? = 0L,
 
-    @Column(name = "url")
-    var url: String? = null,
+    @Column(name = "uri")
+    var uri: String? = null,
 ): BaseEntity()

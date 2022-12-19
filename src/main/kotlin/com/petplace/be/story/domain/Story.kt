@@ -16,10 +16,10 @@ class Story(
     @Column(name = "contents")
     var contents: String? = null,
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "story_id")
+    @OneToMany(mappedBy = "storyId")
     var photos: MutableList<StoryPhoto> = mutableListOf(),
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "story_id")
+    @OneToMany(mappedBy = "storyId")
     var comments: MutableList<StoryComment> = mutableListOf(),
 
     @Column(name = "like_count")
