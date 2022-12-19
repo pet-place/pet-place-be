@@ -4,4 +4,5 @@ import com.petplace.be.story.domain.StoryPhoto
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface StoryPhotoRepository: JpaRepository<StoryPhoto, Long> {
+    fun existsByUri(uri: String): Boolean
 }

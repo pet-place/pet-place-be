@@ -22,6 +22,7 @@ class StoryService(
     val fileUploader: FileUploader,
 ) {
     companion object {
+        const val MAX_IMAGE_FILE_QUANTITY = 5
         val ALLOWED_CONTENT_TYPES = listOf<String>(MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE)
     }
 
@@ -44,6 +45,10 @@ class StoryService(
         if (files.isEmpty()) {
             return
         }
+        // TODO :: merge 이후 에러 코드 생성
+        if (MAX_IMAGE_FILE_QUANTITY < files.size) {
+            throw CommonException(ErrorCode.UNKNOWN)
+        }
         if (!files.all { file -> ALLOWED_CONTENT_TYPES.contains(file.contentType) }) {
             throw CommonException(ErrorCode.UNKNOWN)
         }
@@ -62,5 +67,44 @@ class StoryService(
             }
         }
         return storyPhotos
+    }
+
+    fun updateStory(storyId: Long, title: String, contents: String, imageFiles: List<MultipartFile>) {
+        val story = findStory(storyId)
+        story.title = title
+        story.contents = contents
+
+        val oldStoryPhotos = story.photos.toMutableList()
+
+        validateImageFiles(imageFiles)
+        val newStoryPhotos = uploadImageFilesAndSaveStoryPhotos(imageFiles, storyId)
+
+        deleteStoryPhotos(oldStoryPhotos)
+
+        story.photos = newStoryPhotos
+    }
+
+    private fun findStory(storyId: Long): Story {
+        return storyRepository.findById(storyId).orElseThrow { throw CommonException(ErrorCode.UNKNOWN) }
+    }
+
+    private fun deleteStoryPhotos(storyPhotos: List<StoryPhoto>) {
+        storyPhotos.forEach { storyPhoto ->
+            run {
+                println(storyPhoto.id)
+                println(storyPhoto)
+                val uri = storyPhoto.uri!!
+                storyPhotoRepository.delete(storyPhoto)
+                if (!storyPhotoRepository.existsByUri(uri)) {
+                    fileUploader.delete(uri)
+                }
+            }
+        }
+    }
+
+    fun deleteStory(storyId: Long) {
+        val story = findStory(storyId)
+        deleteStoryPhotos(story.photos)
+        storyRepository.delete(story)
     }
 }

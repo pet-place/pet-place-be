@@ -1,22 +1,20 @@
 package com.petplace.be.story.controller
 
 import com.petplace.be.common.response.BaseResponse
-import com.petplace.be.story.dto.SaveStoryParam
+import com.petplace.be.story.dto.SaveAndUpdateStoryParam
 import com.petplace.be.story.service.StoryService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/story")
 class StoryController(
     val storyService: StoryService,
 ) {
-    @Operation(summary = "스토리 등록", description = "")
+    @Operation(summary = "스토리 등록", description = "새 스토리가 등록됩니다.")
     @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
-    fun saveStory(saveStoryParam: SaveStoryParam): BaseResponse<Long> {
+    fun saveStory(saveStoryParam: SaveAndUpdateStoryParam): BaseResponse<Long> {
         return BaseResponse(
             data = storyService.saveStory(
                 saveStoryParam.title,
@@ -24,5 +22,24 @@ class StoryController(
                 saveStoryParam.files
             )
         )
+    }
+
+    @Operation(summary = "스토리 수정", description = "등록된 스토리가 수정됩니다.")
+    @PutMapping("/{id}", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
+    fun updateStory(@PathVariable id: Long, updateStoryParam: SaveAndUpdateStoryParam): BaseResponse<Void> {
+        storyService.updateStory(
+            id,
+            updateStoryParam.title,
+            updateStoryParam.contents,
+            updateStoryParam.files
+        )
+        return BaseResponse()
+    }
+
+    @Operation(summary = "스토리 삭제", description = "등록된 스토리가 삭제됩니다.")
+    @DeleteMapping("/{id}")
+    fun deleteStory(@PathVariable id: Long): BaseResponse<Void> {
+        storyService.deleteStory(id)
+        return BaseResponse()
     }
 }
