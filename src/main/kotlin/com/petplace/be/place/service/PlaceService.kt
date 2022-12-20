@@ -12,6 +12,7 @@ import com.petplace.be.place.repository.PlaceRepository
 import com.petplace.be.utils.S3Client
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.multipart.MultipartFile
 
 @Service
 class PlaceService(
@@ -19,23 +20,22 @@ class PlaceService(
     private val s3Client: S3Client
 ) {
 
-    /* 플레이스 생성*/
+    /* 플레이스 생성  */
+    @Transactional
     fun savePlace(param: PlaceSaveParam): PlaceSaveResult {
+        val place = placeRepository.save(Place(
+                        name = param.name,
+                        description = param.description,
+                    ))
+
         var uploadedUrl: String = ""
         if (param.profileImage != null) {
-            uploadedUrl = s3Client.upload(param.profileImage!!)
+            uploadedUrl = uploadProfileImage(param.profileImage!!, place.id!!)
         }
 
-        val place = Place(
-            name = param.name,
-            description = param.description,
-            profileUrl = uploadedUrl
-        )
-        val placeId = placeRepository.save(place).id
+        place.updateProfileImage(uploadedUrl)
 
-        return PlaceSaveResult(
-            id = placeId!!
-        )
+        return PlaceSaveResult.generateFrom(place)
     }
 
     /* 플레이스 조회*/
@@ -56,7 +56,7 @@ class PlaceService(
     fun updatePlace(param: PlaceUpdateParam): PlaceUpdateResult{
         var uploadedUrl: String = ""
         if (param.profileImage != null) {
-            uploadedUrl = s3Client.upload(param.profileImage!!)
+            uploadedUrl = uploadProfileImage(param.profileImage!!, param.id)
         }
 
         var place = findPlaceById(param.id)
@@ -76,5 +76,10 @@ class PlaceService(
         return placeRepository.findById(id).orElseThrow {throw CommonException(ErrorCode.PLACE_NOT_FOUND) }
     }
 
+    private fun uploadProfileImage(profileImage: MultipartFile, placeId: Long): String{
+        val key = "$placeId/profileImage"
+        s3Client.upload(profileImage, key)
+        return s3Client.getUrl(key)
+    }
 
 }
