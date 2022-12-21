@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
+import java.io.File
 
 
 @Service
@@ -65,7 +66,7 @@ class StoryService(
         val storyPhotos = mutableListOf<StoryPhoto>()
         imageFiles.forEach { file ->
             run {
-                val uri = fileUploader.upload(file, "${fileNumber++}")
+                val uri = fileUploader.upload(file, "${storyId}${File.separator}${storyId}-${fileNumber++}")
                 storyPhotos.add(storyPhotoRepository.save(StoryPhoto(storyId = storyId, uri = uri)))
             }
         }
