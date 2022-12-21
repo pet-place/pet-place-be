@@ -2,6 +2,7 @@ package com.petplace.be.story.controller
 
 import com.petplace.be.common.response.BaseResponse
 import com.petplace.be.story.dto.SaveAndUpdateStoryParam
+import com.petplace.be.story.dto.StoryResult
 import com.petplace.be.story.service.StoryService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.MediaType
@@ -41,5 +42,17 @@ class StoryController(
     fun deleteStory(@PathVariable id: Long): BaseResponse<Void> {
         storyService.deleteStory(id)
         return BaseResponse()
+    }
+
+    @Operation(summary = "스토리 1개 조회", description = "등록된 스토리 1개를 조회합니다.")
+    @GetMapping("/{id}")
+    fun getStory(@PathVariable id: Long): BaseResponse<StoryResult> {
+        return BaseResponse(data = storyService.getStory(id))
+    }
+
+    @Operation(summary = "스토리 목록 조회", description = "일정 개수의 스토리들을 조회합니다.")
+    @GetMapping
+    fun getStories(@RequestParam page: Int, @RequestParam size: Int): BaseResponse<List<StoryResult>> {
+        return BaseResponse(data = storyService.getStories(page - 1, size))
     }
 }

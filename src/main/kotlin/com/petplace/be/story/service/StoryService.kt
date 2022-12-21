@@ -4,9 +4,12 @@ import com.petplace.be.common.enums.ErrorCode
 import com.petplace.be.common.exception.CommonException
 import com.petplace.be.story.domain.Story
 import com.petplace.be.story.domain.StoryPhoto
+import com.petplace.be.story.dto.StoryPhotoResult
+import com.petplace.be.story.dto.StoryResult
 import com.petplace.be.story.repository.StoryPhotoRepository
 import com.petplace.be.story.repository.StoryRepository
 import com.petplace.be.utils.FileUploader
+import org.springframework.data.domain.PageRequest
 import org.springframework.http.MediaType
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
@@ -106,5 +109,35 @@ class StoryService(
         val story = findStory(storyId)
         deleteStoryPhotos(story.photos)
         storyRepository.delete(story)
+    }
+
+    fun getStory(storyId: Long): StoryResult {
+        val story = findStory(storyId)
+        return convertToStoryResult(story)
+    }
+
+    private fun convertToStoryResult(story: Story): StoryResult {
+        val storyPhotoResults = story.photos.map { storyPhoto -> convertToStoryPhotoResult(storyPhoto) }
+        return StoryResult(
+            id = story.id!!,
+            title = story.title!!,
+            contents = story.contents!!,
+            photos = storyPhotoResults
+        )
+    }
+
+    private fun convertToStoryPhotoResult(storyPhoto: StoryPhoto): StoryPhotoResult {
+        val uri = storyPhoto.uri!!
+        return StoryPhotoResult(order = extractStoryPhotoOrder(uri), uri = uri)
+    }
+
+    private fun extractStoryPhotoOrder(uri: String): Int {
+        val uriComponents: List<String> = uri.split("/")
+        return uriComponents.last().split(".")[0].toInt()
+    }
+
+    fun getStories(page: Int, size: Int): List<StoryResult> {
+        val pageable = PageRequest.of(page, size)
+        return storyRepository.findAllByOrderByIdDesc(pageable).map { story -> convertToStoryResult(story) }
     }
 }
