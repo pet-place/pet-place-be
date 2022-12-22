@@ -9,7 +9,7 @@ import com.petplace.be.place.dto.result.PlaceResult
 import com.petplace.be.place.dto.result.PlaceSaveResult
 import com.petplace.be.place.dto.result.PlaceUpdateResult
 import com.petplace.be.place.repository.PlaceRepository
-import com.petplace.be.utils.S3Client
+import com.petplace.be.utils.FileUploader
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
@@ -17,16 +17,16 @@ import org.springframework.web.multipart.MultipartFile
 @Service
 class PlaceService(
     private val placeRepository: PlaceRepository,
-    private val s3Client: S3Client
+    val fileUploader: FileUploader
 ) {
 
     /* 플레이스 생성  */
     @Transactional
     fun savePlace(param: PlaceSaveParam): PlaceSaveResult {
         val place = placeRepository.save(Place(
-                        name = param.name,
-                        description = param.description,
-                    ))
+            name = param.name,
+            description = param.description,
+        ))
 
         var uploadedUrl: String = ""
         if (param.profileImage != null) {
@@ -78,8 +78,7 @@ class PlaceService(
 
     private fun uploadProfileImage(profileImage: MultipartFile, placeId: Long): String{
         val key = "$placeId/place-profile"
-        s3Client.upload(profileImage, key)
-        return s3Client.getUrl(key)
+        return fileUploader.upload(profileImage, key)
     }
 
 }
