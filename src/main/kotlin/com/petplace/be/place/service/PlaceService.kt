@@ -77,7 +77,7 @@ class PlaceService(
     }
 
     private fun uploadProfileImage(profileImage: MultipartFile, placeId: Long): String{
-        val key = "$placeId/profileImage"
+        val key = "$placeId/place-profile"
         s3Client.upload(profileImage, key)
         return s3Client.getUrl(key)
     }
