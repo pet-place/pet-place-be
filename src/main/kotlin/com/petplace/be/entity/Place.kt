@@ -6,9 +6,14 @@ import com.petplace.be.common.entity.BaseTimeEntity
 import javax.persistence.*
 
 @Entity
+@SequenceGenerator(
+    name = "PLACE_SEQ_GENERATOR",
+    sequenceName = "PLACE_SEQ", // 매핑할 데이터베이스 시퀀스 이름
+    initialValue = 100,
+    allocationSize = 1)
 class Place(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PLACE_SEQ_GENERATOR")
     var id: Long? = null,
 
     var name:String,                // 플레이스 이름
@@ -33,5 +38,9 @@ class Place(
 
     fun delete(){
         this.deleted = true
+    }
+
+    fun updateProfileImage(profileUrl: String){
+        this.profileUrl = profileUrl
     }
 }
