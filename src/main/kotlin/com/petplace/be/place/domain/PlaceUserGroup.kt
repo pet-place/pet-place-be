@@ -1,4 +1,4 @@
-package com.petplace.be.entity
+package com.petplace.be.place.domain
 
 import com.petplace.be.common.entity.BaseTimeEntity
 import com.petplace.be.user.domain.User

@@ -1,7 +1,8 @@
-package com.petplace.be.entity
+package com.petplace.be.pet.domain
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import com.petplace.be.common.entity.BaseEntity
+import com.petplace.be.place.domain.Place
 import com.petplace.be.pet.Gender
 import com.petplace.be.pet.dto.param.PetUpdateParam
 import javax.persistence.*
