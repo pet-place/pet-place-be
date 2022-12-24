@@ -2,7 +2,7 @@ package com.petplace.be.place.service
 
 import com.petplace.be.common.enums.ErrorCode
 import com.petplace.be.common.exception.CommonException
-import com.petplace.be.entity.Place
+import com.petplace.be.place.domain.Place
 import com.petplace.be.place.dto.param.PlaceSaveParam
 import com.petplace.be.place.dto.param.PlaceUpdateParam
 import com.petplace.be.place.dto.result.PlaceResult
@@ -23,10 +23,12 @@ class PlaceService(
     /* 플레이스 생성  */
     @Transactional
     fun savePlace(param: PlaceSaveParam): PlaceSaveResult {
-        val place = placeRepository.save(Place(
+        val place = placeRepository.save(
+            Place(
             name = param.name,
             description = param.description,
-        ))
+            )
+        )
 
         val uploadedUrl = validateAndUploadProfileUrl(param.profileImage, place.id!!)
 
@@ -66,7 +68,7 @@ class PlaceService(
         place.delete()
     }
 
-    private fun findPlaceById(id: Long): Place{
+    private fun findPlaceById(id: Long): Place {
         return placeRepository.findById(id).orElseThrow {throw CommonException(ErrorCode.PLACE_NOT_FOUND) }
     }
 

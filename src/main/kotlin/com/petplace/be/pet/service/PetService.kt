@@ -2,7 +2,7 @@ package com.petplace.be.pet.service
 
 import com.petplace.be.common.enums.ErrorCode
 import com.petplace.be.common.exception.CommonException
-import com.petplace.be.entity.Pet
+import com.petplace.be.pet.domain.Pet
 import com.petplace.be.pet.dto.param.PetSaveParam
 import com.petplace.be.pet.dto.param.PetUpdateParam
 import com.petplace.be.pet.dto.result.PetResult

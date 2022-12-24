@@ -1,6 +1,6 @@
 package com.petplace.be.pet.repository
 
-import com.petplace.be.entity.Pet
+import com.petplace.be.pet.domain.Pet
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

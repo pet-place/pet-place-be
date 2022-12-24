@@ -1,6 +1,6 @@
 package com.petplace.be.user.domain
 
-import com.petplace.be.entity.PlaceUserGroup
+import com.petplace.be.place.domain.PlaceUserGroup
 import javax.persistence.*
 
 @Entity

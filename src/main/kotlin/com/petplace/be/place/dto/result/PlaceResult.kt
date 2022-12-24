@@ -1,8 +1,7 @@
 package com.petplace.be.place.dto.result
 
-import com.petplace.be.entity.Pet
-import com.petplace.be.entity.Place
-import java.time.LocalDateTime
+import com.petplace.be.pet.domain.Pet
+import com.petplace.be.place.domain.Place
 
 data class PlaceResult(
     val id: Long,

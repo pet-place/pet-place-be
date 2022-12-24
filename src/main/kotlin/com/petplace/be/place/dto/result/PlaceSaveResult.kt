@@ -1,6 +1,6 @@
 package com.petplace.be.place.dto.result
 
-import com.petplace.be.entity.Place
+import com.petplace.be.place.domain.Place
 
 data class PlaceSaveResult(
     val id: Long,
