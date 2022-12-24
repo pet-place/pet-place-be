@@ -19,4 +19,5 @@ enum class ErrorCode(val code: String, val message: String) {
     REFRESH_TOKEN_NOT_MATCHED("REFRESH_TOKEN_NOT_MATCHED", "리프레시 토큰이 사용자 정보와 일치하지 않습니다."),
 
     PLACE_NOT_FOUND("PLACE_NOT_FOUND", "플레이스가 존재하지 않습니다."),
+    PET_NOT_FOUND("PET_NOT_FOUND", "반려동물이 존재하지 않습니다.")
 }
