@@ -28,10 +28,7 @@ class PlaceService(
             description = param.description,
         ))
 
-        var uploadedUrl: String = ""
-        if (param.profileImage != null) {
-            uploadedUrl = uploadProfileImage(param.profileImage!!, place.id!!)
-        }
+        val uploadedUrl = validateAndUploadProfileUrl(param.profileImage, place.id!!)
 
         place.updateProfileImage(uploadedUrl)
 
@@ -54,10 +51,7 @@ class PlaceService(
     /* 플레이스 수정 */
     @Transactional
     fun updatePlace(param: PlaceUpdateParam): PlaceUpdateResult{
-        var uploadedUrl: String = ""
-        if (param.profileImage != null) {
-            uploadedUrl = uploadProfileImage(param.profileImage!!, param.id)
-        }
+        val uploadedUrl = validateAndUploadProfileUrl(param.profileImage, param.id)
 
         var place = findPlaceById(param.id)
         place.update(param.name, param.description, uploadedUrl)
@@ -79,6 +73,15 @@ class PlaceService(
     private fun uploadProfileImage(profileImage: MultipartFile, placeId: Long): String{
         val key = "$placeId/place-profile"
         return fileUploader.upload(profileImage, key)
+    }
+
+    private fun validateAndUploadProfileUrl(profileImage: MultipartFile?, placeId: Long): String{
+        return if (profileImage == null){
+            ""
+        }else{
+            val key = "$placeId/place-profile"
+            fileUploader.upload(profileImage, key)
+        }
     }
 
 }

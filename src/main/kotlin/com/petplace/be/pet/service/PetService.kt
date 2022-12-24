@@ -37,10 +37,7 @@ class PetService(
             )
         )
 
-        var uploadedUrl: String = ""
-        if (param.profileImage != null){
-            uploadedUrl = uploadProfileImage(param.profileImage!!, pet.place.id!!, pet.id!!)
-        }
+        val uploadedUrl = validateAndUploadProfileUrl(param.profileImage, pet.place.id!!, pet.id!!)
 
         pet.updateProfileImage(uploadedUrl);
 
@@ -51,7 +48,7 @@ class PetService(
     fun updatePet(param: PetUpdateParam): PetResult{
         val pet = petRepository.findById(param.id).orElseThrow { throw CommonException(ErrorCode.PET_NOT_FOUND) }
 
-        pet.updateProfileImage(uploadProfileImage(param.profileImage!!, param.id, param.placeId))
+        pet.updateProfileImage(validateAndUploadProfileUrl(param.profileImage, param.id, param.placeId))
         pet.update(param)
 
         return PetResult.generateFrom(pet)
@@ -68,9 +65,13 @@ class PetService(
         petRepository.deleteById(id)
     }
 
-    private fun uploadProfileImage(profileImage: MultipartFile, placeId: Long, petId: Long): String{
-        var fileName = "pet-profile-$petId"
-        val key = "$placeId/$fileName"
-        return fileUploader.upload(profileImage, key)
+    private fun validateAndUploadProfileUrl(profileImage: MultipartFile?, placeId: Long, petId: Long): String{
+        return if (profileImage == null){
+            ""
+        }else{
+            var fileName = "pet-profile-$petId"
+            val key = "$placeId/$fileName"
+            return fileUploader.upload(profileImage, key)
+        }
     }
 }
