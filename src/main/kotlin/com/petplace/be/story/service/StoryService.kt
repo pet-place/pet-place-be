@@ -3,9 +3,12 @@ package com.petplace.be.story.service
 import com.petplace.be.common.enums.ErrorCode
 import com.petplace.be.common.exception.CommonException
 import com.petplace.be.story.domain.Story
+import com.petplace.be.story.domain.StoryComment
 import com.petplace.be.story.domain.StoryPhoto
+import com.petplace.be.story.dto.StoryCommentResult
 import com.petplace.be.story.dto.StoryPhotoResult
 import com.petplace.be.story.dto.StoryResult
+import com.petplace.be.story.repository.StoryCommentRepository
 import com.petplace.be.story.repository.StoryPhotoRepository
 import com.petplace.be.story.repository.StoryRepository
 import com.petplace.be.utils.FileUploader
@@ -24,6 +27,7 @@ class StoryService(
     val storyRepository: StoryRepository,
     val storyPhotoRepository: StoryPhotoRepository,
     val fileUploader: FileUploader,
+    val storyCommentRepository: StoryCommentRepository,
 ) {
     companion object {
         const val MAX_IMAGE_FILE_QUANTITY = 5
@@ -66,7 +70,7 @@ class StoryService(
         val storyPhotos = mutableListOf<StoryPhoto>()
         imageFiles.forEach { file ->
             run {
-                val uri = fileUploader.upload(file, "${storyId}${File.separator}${storyId}-${fileNumber++}")
+                val uri = fileUploader.upload(file, "${storyId}${File.separator}${fileNumber++}")
                 storyPhotos.add(storyPhotoRepository.save(StoryPhoto(storyId = storyId, uri = uri)))
             }
         }
@@ -95,8 +99,6 @@ class StoryService(
     private fun deleteStoryPhotos(storyPhotos: List<StoryPhoto>) {
         storyPhotos.forEach { storyPhoto ->
             run {
-                println(storyPhoto.id)
-                println(storyPhoto)
                 val uri = storyPhoto.uri!!
                 storyPhotoRepository.delete(storyPhoto)
                 if (!storyPhotoRepository.existsByUri(uri)) {
@@ -140,5 +142,41 @@ class StoryService(
     fun getStories(page: Int, size: Int): List<StoryResult> {
         val pageable = PageRequest.of(page, size)
         return storyRepository.findAllByOrderByIdDesc(pageable).map { story -> convertToStoryResult(story) }
+    }
+
+    fun saveStoryComment(storyId: Long, contents: String): Long {
+        findStory(storyId)
+        val storyComment = StoryComment(storyId = storyId, contents = contents)
+        val savedStoryComment = storyCommentRepository.save(storyComment)
+        return savedStoryComment.id!!
+    }
+
+    fun updateStoryComment(storyId: Long, storyCommentId: Long, contents: String) {
+        findStory(storyId)
+        val storyComment = findStoryComment(storyCommentId)
+        storyComment.contents = contents
+    }
+
+    private fun findStoryComment(storyCommentId: Long): StoryComment {
+        return storyCommentRepository.findById(storyCommentId).orElseThrow { throw CommonException(ErrorCode.UNKNOWN) }
+    }
+
+    fun deleteStoryComment(storyId: Long, storyCommentId: Long) {
+        findStory(storyId)
+        val storyComment = findStoryComment(storyCommentId)
+        storyCommentRepository.delete(storyComment)
+    }
+
+    fun getStoryComments(storyId: Long, page: Int, size: Int): List<StoryCommentResult> {
+        val pageable = PageRequest.of(page, size)
+        return storyCommentRepository.findAllByOrderByIdDesc(pageable)
+            .map { storyComment -> convertToStoryCommentResult(storyComment) }
+    }
+
+    private fun convertToStoryCommentResult(storyComment: StoryComment): StoryCommentResult {
+        return StoryCommentResult(
+            id = storyComment.id!!,
+            contents = storyComment.contents!!,
+        )
     }
 }
