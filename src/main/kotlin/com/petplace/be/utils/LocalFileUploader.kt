@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile
 import java.io.File
 
 @Component
-@Profile(value = ["default"])
+@Profile(value = ["local"])
 class LocalFileUploader: FileUploader {
     override val destinationFileUriPrefix: String = "/Users/mc/Desktop/study/pet-place-be/src/main/resources/upload/"
 
