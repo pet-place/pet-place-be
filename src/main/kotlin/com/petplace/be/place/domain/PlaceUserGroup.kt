@@ -1,6 +1,6 @@
 package com.petplace.be.place.domain
 
-import com.petplace.be.common.entity.BaseTimeEntity
+import com.petplace.be.common.entity.BaseEntity
 import com.petplace.be.user.domain.User
 import javax.persistence.*
 
@@ -17,4 +17,4 @@ class PlaceUserGroup(
     @ManyToOne
     @JoinColumn(name = "place_id")
     var place: Place
-): BaseTimeEntity()
+): BaseEntity()
