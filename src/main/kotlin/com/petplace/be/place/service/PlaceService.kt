@@ -66,6 +66,17 @@ class PlaceService(
         )
     }
 
+    /* 플레이스 목록 조회*/
+    fun findAllByUser(): MutableList<PlaceByUserResult> {
+        val userId = SecurityContextHolder.getContext().authentication.principal
+        val user = userService.getUserById(userId as Long)
+
+        val resultList = placeGroupRepository.findAllByUser(user)
+        return resultList.stream()
+            .map { p -> PlaceByUserResult.generateFrom(p.place, p.role!!) }
+            .toList()
+    }
+
     /* 플레이스 수정 */
     @Transactional
     fun updatePlace(param: PlaceUpdateParam): PlaceUpdateResult{

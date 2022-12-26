@@ -3,6 +3,7 @@ package com.petplace.be.place.controller
 import com.petplace.be.common.response.BaseResponse
 import com.petplace.be.place.dto.param.PlaceSaveParam
 import com.petplace.be.place.dto.param.PlaceUpdateParam
+import com.petplace.be.place.dto.result.PlaceByUserResult
 import com.petplace.be.place.dto.result.PlaceResult
 import com.petplace.be.place.dto.result.PlaceSaveResult
 import com.petplace.be.place.dto.result.PlaceUpdateResult
@@ -47,5 +48,10 @@ class PlaceController(
         return BaseResponse();
     }
 
-
+    @Operation(summary = "플레이스 목록 조회", description = "사용자의 플레이스 목록을 조회합니다.")
+    @GetMapping()
+    fun findAllPlace(): BaseResponse<MutableList<PlaceByUserResult>> {
+        val response = placeService.findAllByUser()
+        return BaseResponse(response)
+    }
 }
