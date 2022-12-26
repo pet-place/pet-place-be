@@ -70,7 +70,7 @@ class PetService(
             ""
         }else{
             var fileName = "pet-profile-$petId"
-            val key = "$placeId/$fileName"
+            val key = "place-$placeId/$fileName"
             return fileUploader.upload(profileImage, key)
         }
     }

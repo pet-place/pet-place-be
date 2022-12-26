@@ -2,14 +2,17 @@ package com.petplace.be.place.service
 
 import com.petplace.be.common.enums.ErrorCode
 import com.petplace.be.common.exception.CommonException
+import com.petplace.be.place.PlaceRole
 import com.petplace.be.place.domain.Place
+import com.petplace.be.place.domain.PlaceUserGroup
 import com.petplace.be.place.dto.param.PlaceSaveParam
 import com.petplace.be.place.dto.param.PlaceUpdateParam
-import com.petplace.be.place.dto.result.PlaceResult
-import com.petplace.be.place.dto.result.PlaceSaveResult
-import com.petplace.be.place.dto.result.PlaceUpdateResult
+import com.petplace.be.place.dto.result.*
+import com.petplace.be.place.repository.PlaceGroupRepository
 import com.petplace.be.place.repository.PlaceRepository
+import com.petplace.be.user.service.UserService
 import com.petplace.be.utils.FileUploader
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
@@ -17,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile
 @Service
 class PlaceService(
     private val placeRepository: PlaceRepository,
+    private val placeGroupRepository: PlaceGroupRepository,
+    private val userService: UserService,
     val fileUploader: FileUploader
 ) {
 
@@ -33,6 +38,17 @@ class PlaceService(
         val uploadedUrl = validateAndUploadProfileUrl(param.profileImage, place.id!!)
 
         place.updateProfileImage(uploadedUrl)
+
+        // PlaceUserGroup 생성
+        val userId = SecurityContextHolder.getContext().authentication.principal
+        val user = userService.getUserById(userId as Long)
+
+        val placeUserGroup = PlaceUserGroup(
+            user = user,
+            place = place,
+            role = PlaceRole.OWNER
+        )
+        placeGroupRepository.save(placeUserGroup)
 
         return PlaceSaveResult.generateFrom(place)
     }
@@ -72,16 +88,11 @@ class PlaceService(
         return placeRepository.findById(id).orElseThrow {throw CommonException(ErrorCode.PLACE_NOT_FOUND) }
     }
 
-    private fun uploadProfileImage(profileImage: MultipartFile, placeId: Long): String{
-        val key = "$placeId/place-profile"
-        return fileUploader.upload(profileImage, key)
-    }
-
     private fun validateAndUploadProfileUrl(profileImage: MultipartFile?, placeId: Long): String{
         return if (profileImage == null){
             ""
         }else{
-            val key = "$placeId/place-profile"
+            val key = "place-$placeId/place-profile"
             fileUploader.upload(profileImage, key)
         }
     }
