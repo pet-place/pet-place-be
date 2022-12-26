@@ -6,15 +6,10 @@ import com.petplace.be.pet.domain.Pet
 import javax.persistence.*
 
 @Entity
-@SequenceGenerator(
-    name = "PLACE_SEQ_GENERATOR",
-    sequenceName = "PLACE_SEQ", // 매핑할 데이터베이스 시퀀스 이름
-    initialValue = 100,
-    allocationSize = 1)
 class Place(
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PLACE_SEQ_GENERATOR")
-    var id: Long? = null,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = 0L,
 
     var name:String,                // 플레이스 이름
     var description:String,         // 플레이스 설명
