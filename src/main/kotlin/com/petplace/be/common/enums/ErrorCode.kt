@@ -12,7 +12,8 @@ enum class ErrorCode(val code: String, val message: String) {
 
     INVALID_JWT_SIGNATURE("INVALID_JWT_SIGNATURE", "JWT 시그니처가 유효하지 않습니다."),
     MALFORMED_JWT("MALFORMED_JWT", "JWT 형식이 올바르지 않습니다."),
-    EXPIRED_JWT("EXPIRED_JWT", "만료된 JWT입니다."),
+    EXPIRED_ACCESS_TOKEN("EXPIRED_ACCESS_TOKEN", "만료된 액세스 토큰입니다."),
+    EXPIRED_REFRESH_TOKEN("EXPIRED_REFRESH_TOKEN", "만료된 리프레시 토큰입니다."),
     UNSUPPORTED_JWT("UNSUPPORTED_JWT", "지원되지 않는 형식의 JWT입니다."),
     NO_JTW_CLAIM("NO_JTW_CLAIM", "존재하지 않는 JWT claim을 조회하였습니다."),
 

@@ -27,7 +27,7 @@ class JwtAuthenticationFilter(
             return
         }
 
-        tokenProvider.validateToken(accessToken)
+        tokenProvider.validateToken(accessToken, true)
 
         val userId: String? = tokenProvider.getUserIdFromToken(accessToken)
 

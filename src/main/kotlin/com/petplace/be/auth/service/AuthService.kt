@@ -52,7 +52,7 @@ class AuthService(
     }
 
     fun refreshAccessToken(refreshToken: String): RefreshAccessTokenResult {
-        jwtTokenProvider.validateToken(refreshToken)
+        jwtTokenProvider.validateToken(refreshToken, false)
 
         val userId: Long = jwtTokenProvider.getUserIdFromToken(refreshToken)!!.toLong()
         val user = userService.getUserById(userId)

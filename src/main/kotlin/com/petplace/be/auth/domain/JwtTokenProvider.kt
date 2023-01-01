@@ -55,7 +55,7 @@ class JwtTokenProvider {
         return Jwts.parserBuilder().setSigningKey(KEY).build().parseClaimsJws(token).body.subject
     }
 
-    fun validateToken(token: String?) {
+    fun validateToken(token: String?, isAccessToken: Boolean) {
         try {
             Jwts.parserBuilder().setSigningKey(KEY).build().parseClaimsJws(token).body.subject
         } catch (e: SignatureException) {
@@ -63,7 +63,12 @@ class JwtTokenProvider {
         } catch (e: MalformedJwtException) {
             throw CommonException(ErrorCode.MALFORMED_JWT)
         } catch (e: ExpiredJwtException) {
-            throw CommonException(ErrorCode.EXPIRED_JWT)
+            throw CommonException(
+                when {
+                    isAccessToken -> ErrorCode.EXPIRED_ACCESS_TOKEN
+                    else -> ErrorCode.EXPIRED_REFRESH_TOKEN
+                }
+            )
         } catch (e: UnsupportedJwtException) {
             throw CommonException(ErrorCode.UNSUPPORTED_JWT)
         } catch (e: IllegalArgumentException) {
