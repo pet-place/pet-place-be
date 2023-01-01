@@ -24,4 +24,10 @@ class Story(
 
     @Column(name = "like_count")
     var likeCount: Int? = 0,
+
+    @Column(name = "created_by")
+    val createdBy: Long,
+
+    @Column(name = "modified_by")
+    var modifiedBy: Long,
 ) : BaseEntity()

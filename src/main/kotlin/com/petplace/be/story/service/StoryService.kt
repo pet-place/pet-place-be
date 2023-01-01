@@ -35,18 +35,22 @@ class StoryService(
     }
 
     fun saveStory(title: String, contents: String, imageFiles: List<MultipartFile>): Long {
-        // TODO :: BaseEntity 수정 후 사용
-        val userId = SecurityContextHolder.getContext().authentication.principal
+        val userId = getCurrentUserId()
 
         validateImageFiles(imageFiles)
 
-        val savedStory = storyRepository.save(Story(title = title, contents = contents))
+        val savedStory =
+            storyRepository.save(Story(title = title, contents = contents, createdBy = userId, modifiedBy = userId))
         val storyId = savedStory.id!!
 
-        val storyPhotos = uploadImageFilesAndSaveStoryPhotos(imageFiles, storyId)
+        val storyPhotos = uploadImageFilesAndSaveStoryPhotos(imageFiles, storyId, userId)
         savedStory.photos = storyPhotos
 
         return storyId
+    }
+
+    private fun getCurrentUserId(): Long {
+        return SecurityContextHolder.getContext().authentication.principal as Long
     }
 
     private fun validateImageFiles(files: List<MultipartFile>) {
@@ -64,28 +68,41 @@ class StoryService(
 
     private fun uploadImageFilesAndSaveStoryPhotos(
         imageFiles: List<MultipartFile>,
-        storyId: Long
+        storyId: Long,
+        userId: Long
     ): MutableList<StoryPhoto> {
         var fileNumber = 0
         val storyPhotos = mutableListOf<StoryPhoto>()
         imageFiles.forEach { file ->
             run {
                 val uri = fileUploader.upload(file, "${storyId}${File.separator}${fileNumber++}")
-                storyPhotos.add(storyPhotoRepository.save(StoryPhoto(storyId = storyId, uri = uri)))
+                storyPhotos.add(
+                    storyPhotoRepository.save(
+                        StoryPhoto(
+                            storyId = storyId,
+                            uri = uri,
+                            createdBy = userId,
+                            modifiedBy = userId
+                        )
+                    )
+                )
             }
         }
         return storyPhotos
     }
 
     fun updateStory(storyId: Long, title: String, contents: String, imageFiles: List<MultipartFile>) {
+        val userId = getCurrentUserId()
+
         val story = findStory(storyId)
         story.title = title
         story.contents = contents
+        story.modifiedBy = userId
 
         val oldStoryPhotos = story.photos.toMutableList()
 
         validateImageFiles(imageFiles)
-        val newStoryPhotos = uploadImageFilesAndSaveStoryPhotos(imageFiles, storyId)
+        val newStoryPhotos = uploadImageFilesAndSaveStoryPhotos(imageFiles, storyId, userId)
 
         deleteStoryPhotos(oldStoryPhotos)
 
@@ -146,15 +163,22 @@ class StoryService(
 
     fun saveStoryComment(storyId: Long, contents: String): Long {
         findStory(storyId)
-        val storyComment = StoryComment(storyId = storyId, contents = contents)
+
+        val userId = getCurrentUserId()
+
+        val storyComment = StoryComment(storyId = storyId, contents = contents, createdBy = userId, modifiedBy = userId)
         val savedStoryComment = storyCommentRepository.save(storyComment)
         return savedStoryComment.id!!
     }
 
     fun updateStoryComment(storyId: Long, storyCommentId: Long, contents: String) {
         findStory(storyId)
+
+        val userId = getCurrentUserId()
+
         val storyComment = findStoryComment(storyCommentId)
         storyComment.contents = contents
+        storyComment.modifiedBy = userId
     }
 
     private fun findStoryComment(storyCommentId: Long): StoryComment {

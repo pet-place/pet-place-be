@@ -15,4 +15,10 @@ class StoryComment(
 
     @Column(name = "contents")
     var contents: String? = null,
+
+    @Column(name = "created_by")
+    val createdBy: Long,
+
+    @Column(name = "modified_by")
+    var modifiedBy: Long,
 ) : BaseEntity()

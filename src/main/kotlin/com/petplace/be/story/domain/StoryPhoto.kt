@@ -15,4 +15,10 @@ class StoryPhoto(
 
     @Column(name = "uri")
     var uri: String? = null,
+
+    @Column(name = "created_by")
+    val createdBy: Long,
+
+    @Column(name = "modified_by")
+    var modifiedBy: Long,
 ): BaseEntity()
