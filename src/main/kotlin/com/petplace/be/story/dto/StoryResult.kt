@@ -5,4 +5,5 @@ data class StoryResult(
     val title: String,
     val contents: String,
     val photos: List<StoryPhotoResult>,
+    val isLikedStory: Boolean
 )

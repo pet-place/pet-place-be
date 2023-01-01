@@ -80,7 +80,7 @@ class StoryController(
 
     @Operation(summary = "댓글 삭제", description = "특정 스토리에 등록된 댓글을 삭제합니다.")
     @DeleteMapping("/{storyId}/comment/{storyCommentId}")
-    fun deleteStoryComment(@PathVariable storyId: Long, @PathVariable storyCommentId: Long, ): BaseResponse<Void> {
+    fun deleteStoryComment(@PathVariable storyId: Long, @PathVariable storyCommentId: Long): BaseResponse<Void> {
         storyService.deleteStoryComment(storyId, storyCommentId)
         return BaseResponse()
     }
@@ -93,5 +93,19 @@ class StoryController(
         @RequestParam size: Int
     ): BaseResponse<List<StoryCommentResult>> {
         return BaseResponse(storyService.getStoryComments(storyId, page - 1, size))
+    }
+
+    @Operation(summary = "좋아요 추가", description = "특정 스토리에 좋아요를 추가합니다.")
+    @PostMapping("/{storyId}/like")
+    fun saveStoryUserLike(@PathVariable storyId: Long): BaseResponse<Void> {
+        storyService.saveStoryUserLike(storyId)
+        return BaseResponse()
+    }
+
+    @Operation(summary = "좋아요 제거", description = "특정 스토리에 추가했던 특정 사용자의 좋아요를 제거합니다.")
+    @DeleteMapping("/{storyId}/like")
+    fun deleteStoryUserLike(@PathVariable storyId: Long): BaseResponse<Void> {
+        storyService.deleteStoryUserLike(storyId)
+        return BaseResponse()
     }
 }

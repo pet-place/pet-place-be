@@ -5,12 +5,14 @@ import com.petplace.be.common.exception.CommonException
 import com.petplace.be.story.domain.Story
 import com.petplace.be.story.domain.StoryComment
 import com.petplace.be.story.domain.StoryPhoto
+import com.petplace.be.story.domain.StoryUserLike
 import com.petplace.be.story.dto.StoryCommentResult
 import com.petplace.be.story.dto.StoryPhotoResult
 import com.petplace.be.story.dto.StoryResult
 import com.petplace.be.story.repository.StoryCommentRepository
 import com.petplace.be.story.repository.StoryPhotoRepository
 import com.petplace.be.story.repository.StoryRepository
+import com.petplace.be.story.repository.StoryUserLikeRepository
 import com.petplace.be.utils.FileUploader
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.MediaType
@@ -28,6 +30,7 @@ class StoryService(
     val storyPhotoRepository: StoryPhotoRepository,
     val fileUploader: FileUploader,
     val storyCommentRepository: StoryCommentRepository,
+    val storyUserLikeRepository: StoryUserLikeRepository,
 ) {
     companion object {
         const val MAX_IMAGE_FILE_QUANTITY = 5
@@ -128,21 +131,26 @@ class StoryService(
     fun deleteStory(storyId: Long) {
         val story = findStory(storyId)
         deleteStoryPhotos(story.photos)
+        storyUserLikeRepository.deleteByStoryId(storyId)
         storyRepository.delete(story)
     }
 
+    @Transactional(readOnly = true)
     fun getStory(storyId: Long): StoryResult {
         val story = findStory(storyId)
-        return convertToStoryResult(story)
+        val userId = getCurrentUserId()
+        return convertToStoryResult(story, userId)
     }
 
-    private fun convertToStoryResult(story: Story): StoryResult {
+    private fun convertToStoryResult(story: Story, userId: Long): StoryResult {
+        val storyId = story.id!!
         val storyPhotoResults = story.photos.map { storyPhoto -> convertToStoryPhotoResult(storyPhoto) }
         return StoryResult(
-            id = story.id!!,
+            id = storyId,
             title = story.title!!,
             contents = story.contents!!,
-            photos = storyPhotoResults
+            photos = storyPhotoResults,
+            isLikedStory = storyUserLikeRepository.existsByStoryIdAndUserId(storyId, userId)
         )
     }
 
@@ -156,9 +164,11 @@ class StoryService(
         return uriComponents.last().split(".")[0].toInt()
     }
 
+    @Transactional(readOnly = true)
     fun getStories(page: Int, size: Int): List<StoryResult> {
         val pageable = PageRequest.of(page, size)
-        return storyRepository.findAllByOrderByIdDesc(pageable).map { story -> convertToStoryResult(story) }
+        val userId = getCurrentUserId()
+        return storyRepository.findAllByOrderByIdDesc(pageable).map { story -> convertToStoryResult(story, userId) }
     }
 
     fun saveStoryComment(storyId: Long, contents: String): Long {
@@ -202,5 +212,28 @@ class StoryService(
             id = storyComment.id!!,
             contents = storyComment.contents!!,
         )
+    }
+
+    fun saveStoryUserLike(storyId: Long) {
+        val story = findStory(storyId)
+        val userId = getCurrentUserId()
+        if (storyUserLikeRepository.existsByStoryIdAndUserId(storyId, userId)) {
+            throw CommonException(ErrorCode.UNKNOWN)
+        }
+        storyUserLikeRepository.save(StoryUserLike(storyId = storyId, userId = userId))
+        updateStoryLikeCount(story)
+    }
+
+    private fun updateStoryLikeCount(story: Story) {
+        story.likeCount = storyUserLikeRepository.countAllByStoryId(story.id!!)
+    }
+
+    fun deleteStoryUserLike(storyId: Long) {
+        val story = findStory(storyId)
+        val userId = getCurrentUserId()
+        val storyUserLike = storyUserLikeRepository.findByStoryIdAndUserId(storyId, userId)
+            .orElseThrow { throw CommonException(ErrorCode.UNKNOWN) }
+        storyUserLikeRepository.delete(storyUserLike)
+        updateStoryLikeCount(story)
     }
 }
