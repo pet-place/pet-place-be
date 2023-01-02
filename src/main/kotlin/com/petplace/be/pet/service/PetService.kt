@@ -46,7 +46,7 @@ class PetService(
 
     @Transactional
     fun updatePet(param: PetUpdateParam): PetResult{
-        val pet = petRepository.findById(param.id).orElseThrow { throw CommonException(ErrorCode.PET_NOT_FOUND) }
+        val pet = findPet(param.id)
 
         pet.updateProfileImage(validateAndUploadProfileUrl(param.profileImage, param.id, param.placeId))
         pet.update(param)
@@ -55,9 +55,11 @@ class PetService(
     }
 
     fun findByPetId(id: Long): PetResult{
-        return PetResult.generateFrom(
-            petRepository.findById(id).orElseThrow { throw CommonException(ErrorCode.PET_NOT_FOUND) }
-        )
+        return PetResult.generateFrom(findPet(id))
+    }
+
+    fun findPet(id: Long): Pet{
+        return petRepository.findById(id).orElseThrow { throw CommonException(ErrorCode.PET_NOT_FOUND) }
     }
 
     @Transactional
