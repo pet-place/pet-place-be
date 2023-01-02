@@ -50,4 +50,24 @@ class SwaggerConfig {
             .pathsToMatch(*paths)
             .build()
     }
+
+    @Bean
+    fun todoAPI(): GroupedOpenApi {
+        val paths = arrayOf("/todo/**")
+
+        return GroupedOpenApi.builder()
+            .group("todo API")
+            .pathsToMatch(*paths)
+            .build()
+    }
+
+    @Bean
+    fun storyAPI(): GroupedOpenApi {
+        val paths = arrayOf("/story/**")
+
+        return GroupedOpenApi.builder()
+            .group("story API")
+            .pathsToMatch(*paths)
+            .build()
+    }
 }
