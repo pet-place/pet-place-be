@@ -1,6 +1,7 @@
 package com.petplace.be.pet.domain
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.petplace.be.common.entity.BaseEntity
 import com.petplace.be.place.domain.Place
 import com.petplace.be.pet.Gender
@@ -23,10 +24,9 @@ class Pet(
     var disliked: String?,              // 싫어하는 것
     var profileImage: String?,
 
-//    @JsonManagedReference
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pet")
-//    var todo: MutableList<Todo> = mutableListOf(),
-
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pet")
+    var todoList: MutableList<Todo> = mutableListOf(),
 
     @ManyToOne
     @JsonBackReference
