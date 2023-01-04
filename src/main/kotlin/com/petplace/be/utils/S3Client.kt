@@ -22,13 +22,16 @@ class S3Client(
     override lateinit var destinationFileUriPrefix: String
 
     override fun upload(sourceFile: MultipartFile, destinationFileName: String): String {
+        val filename = sourceFile.originalFilename!!
+        val ext = filename.substring(filename.lastIndexOf(".") + 1)
         val size = sourceFile.size
         val objectMetaData = ObjectMetadata()
         objectMetaData.contentType = sourceFile.contentType
         objectMetaData.contentLength = size
 
         amazonS3Client.putObject(
-            PutObjectRequest(destinationFileUriPrefix, destinationFileName, sourceFile.inputStream, objectMetaData)
+            PutObjectRequest(destinationFileUriPrefix,
+                "$destinationFileName.$ext", sourceFile.inputStream, objectMetaData)
                 .withCannedAcl(CannedAccessControlList.PublicRead))
 
         return amazonS3Client.getUrl(destinationFileUriPrefix, destinationFileName).toString()
