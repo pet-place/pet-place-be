@@ -3,10 +3,7 @@ package com.petplace.be.place.controller
 import com.petplace.be.common.response.BaseResponse
 import com.petplace.be.place.dto.param.PlaceSaveParam
 import com.petplace.be.place.dto.param.PlaceUpdateParam
-import com.petplace.be.place.dto.result.PlaceByUserResult
-import com.petplace.be.place.dto.result.PlaceResult
-import com.petplace.be.place.dto.result.PlaceSaveResult
-import com.petplace.be.place.dto.result.PlaceUpdateResult
+import com.petplace.be.place.dto.result.*
 import com.petplace.be.place.service.PlaceService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -54,4 +51,12 @@ class PlaceController(
         val response = placeService.findAllByUser()
         return BaseResponse(response)
     }
+
+    @Operation(summary = "플레이스 멤버 목록 조회", description = "플레이스의 멤버 목록을 조회합니다.")
+    @GetMapping("/{id}/member")
+    fun findAllPlaceMember(@PathVariable id: Long): BaseResponse<List<PlaceMemberResult>> {
+        val response = placeService.findPlaceMember(id)
+        return BaseResponse(response)
+    }
+
 }

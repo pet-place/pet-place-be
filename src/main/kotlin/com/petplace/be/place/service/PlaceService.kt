@@ -8,7 +8,7 @@ import com.petplace.be.place.domain.PlaceUserGroup
 import com.petplace.be.place.dto.param.PlaceSaveParam
 import com.petplace.be.place.dto.param.PlaceUpdateParam
 import com.petplace.be.place.dto.result.*
-import com.petplace.be.place.repository.PlaceGroupRepository
+import com.petplace.be.place.repository.PlaceUserGroupRepository
 import com.petplace.be.place.repository.PlaceRepository
 import com.petplace.be.user.service.UserService
 import com.petplace.be.utils.FileUploader
@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile
 @Service
 class PlaceService(
     private val placeRepository: PlaceRepository,
-    private val placeGroupRepository: PlaceGroupRepository,
+    private val placeUserGroupRepository: PlaceUserGroupRepository,
     private val userService: UserService,
     val fileUploader: FileUploader
 ) {
@@ -48,7 +48,7 @@ class PlaceService(
             place = place,
             role = PlaceRole.OWNER
         )
-        placeGroupRepository.save(placeUserGroup)
+        placeUserGroupRepository.save(placeUserGroup)
 
         return PlaceSaveResult.generateFrom(place)
     }
@@ -71,7 +71,7 @@ class PlaceService(
         val userId = SecurityContextHolder.getContext().authentication.principal
         val user = userService.getUserById(userId as Long)
 
-        val resultList = placeGroupRepository.findAllByUser(user)
+        val resultList = placeUserGroupRepository.findAllByUser(user)
         return resultList.stream()
             .map { p -> PlaceByUserResult.generateFrom(p.place, p.role!!) }
             .toList()
@@ -93,6 +93,18 @@ class PlaceService(
     fun deletePlace(id: Long){
         var place = findPlaceById(id);
         place.delete()
+    }
+
+    /* 플레이스 멤버 목록 조회 */
+    fun findPlaceMember(id: Long):List<PlaceMemberResult>{
+        var placeUserGroup = placeUserGroupRepository.findAllByPlace_Id(id)
+
+        return placeUserGroup.map {
+                placeUserGroup ->
+                val user = placeUserGroup.user
+                PlaceMemberResult.generateFrom(user = user,role = placeUserGroup.role!!
+                )
+        }.toList()
     }
 
     private fun findPlaceById(id: Long): Place {
