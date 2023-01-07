@@ -20,7 +20,7 @@ class TodoController(
     @Operation(summary = "카테고리 목록 조회", description = "Todo 등록시 사용할 카테고리 목록을 조회합니다.")
     @ApiResponse(responseCode = "200", description = "한글 문자열로 반환됩니다.")
     @GetMapping("/categories")
-    fun getCategoryList(): BaseResponse<MutableList<String>> {
+    fun getCategoryList(): BaseResponse<List<String>> {
         val response = todoService.categoryList()
         return BaseResponse(response)
     }

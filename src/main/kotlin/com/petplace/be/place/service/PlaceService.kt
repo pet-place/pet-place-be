@@ -67,7 +67,7 @@ class PlaceService(
     }
 
     /* 플레이스 목록 조회*/
-    fun findAllByUser(): MutableList<PlaceByUserResult> {
+    fun findAllByUser(): List<PlaceByUserResult> {
         val userId = SecurityContextHolder.getContext().authentication.principal
         val user = userService.getUserById(userId as Long)
 

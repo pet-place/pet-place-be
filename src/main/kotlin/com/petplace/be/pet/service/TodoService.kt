@@ -56,7 +56,7 @@ class TodoService(
                .map { todo -> TodoResult.generateFrom(todo) }.toList()
     }
 
-    fun categoryList(): MutableList<String>{
+    fun categoryList(): List<String>{
         val array = TodoCategory.values()
         val categoryList = mutableListOf<String>()
         for (a in array){
