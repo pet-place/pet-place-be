@@ -47,7 +47,7 @@ class PlaceController(
 
     @Operation(summary = "플레이스 목록 조회", description = "사용자의 플레이스 목록을 조회합니다.")
     @GetMapping()
-    fun findAllPlace(): BaseResponse<MutableList<PlaceByUserResult>> {
+    fun findAllPlace(): BaseResponse<List<PlaceByUserResult>> {
         val response = placeService.findAllByUser()
         return BaseResponse(response)
     }
