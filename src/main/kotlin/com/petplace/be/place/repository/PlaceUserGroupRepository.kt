@@ -7,7 +7,9 @@ import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 
 @Repository
-interface PlaceGroupRepository: JpaRepository<PlaceUserGroup, Long> {
+interface PlaceUserGroupRepository: JpaRepository<PlaceUserGroup, Long> {
 
     fun findAllByUser(@Param("user") user:User): MutableList<PlaceUserGroup>
+
+    fun findAllByPlace_Id(@Param("placeId") placeId: Long): List<PlaceUserGroup>
 }
