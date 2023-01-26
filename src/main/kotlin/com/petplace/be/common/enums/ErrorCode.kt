@@ -21,5 +21,7 @@ enum class ErrorCode(val code: String, val message: String) {
 
     PLACE_NOT_FOUND("PLACE_NOT_FOUND", "플레이스가 존재하지 않습니다."),
     PET_NOT_FOUND("PET_NOT_FOUND", "반려동물이 존재하지 않습니다."),
-    TODO_NOT_FOUND("TODO_NOT_FOUND","TODO가 존재하지 않습니다.")
+    TODO_NOT_FOUND("TODO_NOT_FOUND","TODO가 존재하지 않습니다."),
+
+    MAX_UPLOAD_SIZE("MAX_UPLOAD_SIZE","파일 사이즈 용량 초과")
 }
