@@ -34,7 +34,7 @@ class S3Client(
                 "$destinationFileName.$ext", sourceFile.inputStream, objectMetaData)
                 .withCannedAcl(CannedAccessControlList.PublicRead))
 
-        return amazonS3Client.getUrl(destinationFileUriPrefix, destinationFileName).toString()
+        return "$destinationFileName.$ext"
     }
 
     override fun delete(targetFileUri: String) {

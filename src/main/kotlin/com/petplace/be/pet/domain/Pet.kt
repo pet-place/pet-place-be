@@ -22,7 +22,7 @@ class Pet(
     var characteristic: String?,        // 특징
     var liked: String?,                 // 좋아하는 것
     var disliked: String?,              // 싫어하는 것
-    var profileImage: String?,
+    var profileImage: String? = null,
 
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pet")
@@ -34,7 +34,7 @@ class Pet(
     var place: Place
 ) : BaseEntity() {
 
-    fun updateProfileImage(profileImage: String){
+    fun updateProfileImage(profileImage: String?){
         this.profileImage = profileImage
     }
 

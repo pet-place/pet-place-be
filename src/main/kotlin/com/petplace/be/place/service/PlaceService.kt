@@ -8,8 +8,8 @@ import com.petplace.be.place.domain.PlaceUserGroup
 import com.petplace.be.place.dto.param.PlaceSaveParam
 import com.petplace.be.place.dto.param.PlaceUpdateParam
 import com.petplace.be.place.dto.result.*
-import com.petplace.be.place.repository.PlaceUserGroupRepository
 import com.petplace.be.place.repository.PlaceRepository
+import com.petplace.be.place.repository.PlaceUserGroupRepository
 import com.petplace.be.user.service.UserService
 import com.petplace.be.utils.FileUploader
 import org.springframework.security.core.context.SecurityContextHolder
@@ -37,7 +37,9 @@ class PlaceService(
 
         val uploadedUrl = validateAndUploadProfileUrl(param.profileImage, place.id!!)
 
-        place.updateProfileImage(uploadedUrl)
+        if (uploadedUrl != null) {
+            place.updateProfileImage(uploadedUrl)
+        }
 
         // PlaceUserGroup 생성
         val userId = SecurityContextHolder.getContext().authentication.principal
@@ -50,20 +52,14 @@ class PlaceService(
         )
         placeUserGroupRepository.save(placeUserGroup)
 
-        return PlaceSaveResult.generateFrom(place)
+        return PlaceSaveResult(place)
     }
 
     /* 플레이스 조회*/
     fun findById(id: Long): PlaceResult {
         val place = findPlaceById(id)
 
-        return PlaceResult(
-            id = place.id!!,
-            name = place.name,
-            description = place.description,
-            profileUrl = place.profileUrl,
-            pets = place.pets
-        )
+        return PlaceResult(place)
     }
 
     /* 플레이스 목록 조회*/
@@ -73,19 +69,19 @@ class PlaceService(
 
         val resultList = placeUserGroupRepository.findAllByUser(user)
         return resultList.stream()
-            .map { p -> PlaceByUserResult.generateFrom(p.place, p.role!!) }
+            .map { p -> PlaceByUserResult(p.place, p.role!!) }
             .toList()
     }
 
     /* 플레이스 수정 */
     @Transactional
     fun updatePlace(param: PlaceUpdateParam): PlaceUpdateResult{
-        val uploadedUrl = validateAndUploadProfileUrl(param.profileImage, param.id)
+        val place = findPlaceById(param.id)
 
-        var place = findPlaceById(param.id)
+        val uploadedUrl: String? = validateAndUploadProfileUrl(param.profileImage, param.id)
         place.update(param.name, param.description, uploadedUrl)
 
-        return PlaceUpdateResult.generateFrom(place)
+        return PlaceUpdateResult(place)
     }
 
     /* 플레이스 삭제 */
@@ -102,8 +98,7 @@ class PlaceService(
         return placeUserGroup.map {
                 placeUserGroup ->
                 val user = placeUserGroup.user
-                PlaceMemberResult.generateFrom(user = user,role = placeUserGroup.role!!
-                )
+                PlaceMemberResult(user,placeUserGroup.role!!)
         }.toList()
     }
 
@@ -111,13 +106,11 @@ class PlaceService(
         return placeRepository.findById(id).orElseThrow {throw CommonException(ErrorCode.PLACE_NOT_FOUND) }
     }
 
-    private fun validateAndUploadProfileUrl(profileImage: MultipartFile?, placeId: Long): String{
-        return if (profileImage == null){
-            ""
-        }else{
+    private fun validateAndUploadProfileUrl(profileImage: MultipartFile?, placeId: Long): String?{
+        if (profileImage != null && !profileImage.isEmpty){
             val key = "place-$placeId/place-profile"
-            fileUploader.upload(profileImage, key)
+            return fileUploader.upload(profileImage, key)
         }
+        return null
     }
-
 }

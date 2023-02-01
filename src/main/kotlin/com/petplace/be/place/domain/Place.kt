@@ -21,13 +21,9 @@ class Place(
     var pets: MutableList<Pet> = mutableListOf(),   // 플레이스 소속 반려동물들
 ) : BaseEntity() {
 
-    fun update(name: String?, description: String?, profileUrl: String?){
-        if (name != null) {
-            this.name = name
-        }
-        if (description != null) {
-            this.description = description
-        }
+    fun update(name: String, description: String, profileUrl: String?){
+        this.name = name
+        this.description = description
         this.profileUrl = profileUrl
     }
 

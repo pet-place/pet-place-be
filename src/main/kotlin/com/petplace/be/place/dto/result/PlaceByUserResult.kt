@@ -1,5 +1,6 @@
 package com.petplace.be.place.dto.result
 
+import com.petplace.be.common.entity.BaseDto
 import com.petplace.be.place.PlaceRole
 import com.petplace.be.place.domain.Place
 
@@ -9,14 +10,10 @@ data class PlaceByUserResult(
     val profileUrl: String?,
     val role:PlaceRole
 ){
-    companion object {
-        fun generateFrom(place: Place, role: PlaceRole): PlaceByUserResult{
-            return PlaceByUserResult(
-                id = place.id!!,
-                name = place.name,
-                profileUrl = place.profileUrl,
-                role = role
-            )
-        }
-    }
+    constructor(place: Place, role: PlaceRole) : this(
+        id = place.id!!,
+        name = place.name,
+        profileUrl = BaseDto.getProfileUrl(place.profileUrl),
+        role = role
+    )
 }

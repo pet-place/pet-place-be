@@ -1,6 +1,7 @@
 package com.petplace.be.place.dto.result
 
-import com.petplace.be.pet.domain.Pet
+import com.petplace.be.common.entity.BaseDto
+import com.petplace.be.pet.dto.result.PetResult
 import com.petplace.be.place.domain.Place
 
 data class PlaceUpdateResult(
@@ -8,17 +9,14 @@ data class PlaceUpdateResult(
     var name: String,
     var description: String,
     val profileUrl: String?,
-    var pets: MutableList<Pet>
+    var pets: List<PetResult>
 ){
-    companion object {
-        fun generateFrom(place: Place): PlaceUpdateResult{
-            return PlaceUpdateResult(
-                id = place.id!! ,
-                name = place.name,
-                description = place.description,
-                profileUrl = place.profileUrl,
-                pets = place.pets
-            )
-        }
-    }
+    constructor(place: Place): this(
+        id = place.id!! ,
+        name = place.name,
+        description = place.description,
+        profileUrl = BaseDto.getProfileUrl(place.profileUrl),
+        pets = place.pets.map {pet -> (PetResult(pet))}
+            .toList()
+    )
 }

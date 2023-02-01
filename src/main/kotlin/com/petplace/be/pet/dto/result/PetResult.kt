@@ -1,7 +1,8 @@
 package com.petplace.be.pet.dto.result
 
-import com.petplace.be.pet.domain.Pet
+import com.petplace.be.common.entity.BaseDto
 import com.petplace.be.pet.Gender
+import com.petplace.be.pet.domain.Pet
 
 data class PetResult(
     var id: Long,
@@ -14,19 +15,15 @@ data class PetResult(
     val placeId: Long,
     val profileImageUrl: String?
 ){
-    companion object {
-        fun generateFrom(pet: Pet): PetResult {
-            return PetResult(
-                id = pet.id!! ,
-                name = pet.name,
-                age = pet.age,
-                gender = pet.gender,
-                characteristic = pet.characteristic,
-                liked = pet.liked,
-                disliked = pet.liked,
-                placeId = pet.place.id!!,
-                profileImageUrl = pet.profileImage
-            )
-        }
-    }
+    constructor(pet: Pet): this(
+        id = pet.id!! ,
+        name = pet.name,
+        age = pet.age,
+        gender = pet.gender,
+        characteristic = pet.characteristic,
+        liked = pet.liked,
+        disliked = pet.liked,
+        placeId = pet.place.id!!,
+        profileImageUrl = BaseDto.getProfileUrl(pet.profileImage)
+    )
 }

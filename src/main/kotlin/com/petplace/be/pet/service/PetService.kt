@@ -41,21 +41,22 @@ class PetService(
 
         pet.updateProfileImage(uploadedUrl);
 
-        return PetResult.generateFrom(pet)
+        return PetResult(pet)
     }
 
     @Transactional
     fun updatePet(param: PetUpdateParam): PetResult{
         val pet = findPet(param.id)
 
-        pet.updateProfileImage(validateAndUploadProfileUrl(param.profileImage, param.id, param.placeId))
+        val uploadedUrl:String? = validateAndUploadProfileUrl(param.profileImage, param.id, param.placeId)
+        pet.updateProfileImage(uploadedUrl)
         pet.update(param)
 
-        return PetResult.generateFrom(pet)
+        return PetResult(pet)
     }
 
     fun findByPetId(id: Long): PetResult{
-        return PetResult.generateFrom(findPet(id))
+        return PetResult(findPet(id))
     }
 
     fun findPet(id: Long): Pet{
@@ -67,13 +68,12 @@ class PetService(
         petRepository.deleteById(id)
     }
 
-    private fun validateAndUploadProfileUrl(profileImage: MultipartFile?, placeId: Long, petId: Long): String{
-        return if (profileImage == null){
-            ""
-        }else{
+    private fun validateAndUploadProfileUrl(profileImage: MultipartFile?, placeId: Long, petId: Long): String?{
+        if (profileImage != null && !profileImage.isEmpty) {
             var fileName = "pet-profile-$petId"
             val key = "place-$placeId/$fileName"
             return fileUploader.upload(profileImage, key)
         }
+        return null
     }
 }
