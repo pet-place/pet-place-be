@@ -24,7 +24,10 @@ class Place(
     fun update(name: String, description: String, profileUrl: String?){
         this.name = name
         this.description = description
-        this.profileUrl = profileUrl
+
+        if(!profileUrl.isNullOrEmpty()){
+            this.profileUrl = profileUrl
+        }
     }
 
     fun delete(){
