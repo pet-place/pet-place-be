@@ -6,6 +6,7 @@ import com.petplace.be.pet.TodoCategory
 import com.petplace.be.pet.domain.Todo
 import com.petplace.be.pet.dto.param.TodoSaveParam
 import com.petplace.be.pet.dto.param.TodoUpdateParam
+import com.petplace.be.pet.dto.result.TodoCountResult
 import com.petplace.be.pet.dto.result.TodoResult
 import com.petplace.be.pet.repository.TodoRepository
 import org.springframework.stereotype.Service
@@ -63,6 +64,13 @@ class TodoService(
             categoryList.add(a.korValue)
         }
         return categoryList
+    }
+
+    @Transactional
+    fun checkTodo(checked: Boolean, id: Long): TodoCountResult{
+        val todo = findTodo(id)
+        val count = todo.updateFrequency(checked)
+        return TodoCountResult(id = todo.id!!, count = count)
     }
 
     fun findTodo(id: Long): Todo{

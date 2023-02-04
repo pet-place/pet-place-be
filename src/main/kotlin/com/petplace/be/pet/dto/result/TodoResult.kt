@@ -10,7 +10,8 @@ data class TodoResult(
     val frequency: Int,
     val startDate: LocalDate?,
     val endDate: LocalDate?,
-    val memo: String?
+    val memo: String?,
+    val count: Int
 ){
     companion object {
         fun generateFrom(todo: Todo): TodoResult {
@@ -20,7 +21,8 @@ data class TodoResult(
                 frequency = todo.frequency,
                 startDate = todo.startDate,
                 endDate = todo.endDate,
-                memo = todo.memo
+                memo = todo.memo,
+                count = todo.count
             )
         }
     }

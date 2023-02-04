@@ -3,9 +3,11 @@ package com.petplace.be.pet.controller
 import com.petplace.be.common.response.BaseResponse
 import com.petplace.be.pet.dto.param.TodoSaveParam
 import com.petplace.be.pet.dto.param.TodoUpdateParam
+import com.petplace.be.pet.dto.result.TodoCountResult
 import com.petplace.be.pet.dto.result.TodoResult
 import com.petplace.be.pet.service.TodoService
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.*
@@ -51,6 +53,16 @@ class TodoController(
     fun findTodoList(@PathVariable petId: Long): BaseResponse<MutableList<TodoResult>>{
         val response = todoService.findTodoList(petId)
         return BaseResponse(response)
+    }
+
+    @Operation(summary = "todo 체크", description = "todo를 체크 또는 체크 해제 합니다.", parameters = [
+        Parameter(name = "checked", description = "todo를 체크하면 true, 체크를 해제하면 false 입니다."),
+    ])
+    @PutMapping("/click/{id}")
+    fun checkTodo(@PathVariable id: Long,
+                  @RequestParam checked: Boolean): BaseResponse<TodoCountResult>{
+        val todoCountResult = todoService.checkTodo(checked, id)
+        return BaseResponse(todoCountResult)
     }
 
 }
