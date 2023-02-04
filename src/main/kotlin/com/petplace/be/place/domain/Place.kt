@@ -17,7 +17,7 @@ class Place(
     var profileUrl:String? = null,  // 플레이스 프로필 주소
     var deleted: Boolean = false,
 
-    @OneToMany(mappedBy = "placeId")
+    @OneToMany(mappedBy = "placeId", cascade = [CascadeType.REMOVE])
     var pets: MutableList<Pet> = mutableListOf(),   // 플레이스 소속 반려동물들
 ) : BaseEntity() {
 
