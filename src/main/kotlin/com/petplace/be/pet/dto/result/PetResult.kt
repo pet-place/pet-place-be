@@ -23,7 +23,7 @@ data class PetResult(
         characteristic = pet.characteristic,
         liked = pet.liked,
         disliked = pet.liked,
-        placeId = pet.place.id!!,
+        placeId = pet.placeId,
         profileImageUrl = BaseDto.getProfileUrl(pet.profileImage)
     )
 }

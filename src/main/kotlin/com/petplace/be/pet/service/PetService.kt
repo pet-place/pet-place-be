@@ -21,9 +21,6 @@ class PetService(
 ) {
     @Transactional
     fun savePet(param: PetSaveParam): PetResult {
-        val savedPlace = placeRepository.findById(param.placeId)
-            .orElseThrow {throw CommonException(ErrorCode.PLACE_NOT_FOUND) }
-
         val pet = petRepository.save(
             Pet(
             name = param.name,
@@ -32,12 +29,12 @@ class PetService(
             characteristic = param.characteristic,
             liked = param.liked,
             disliked = param.disliked,
-            place = savedPlace,
+            placeId = param.placeId,
             profileImage = null
             )
         )
 
-        val uploadedUrl = validateAndUploadProfileUrl(param.profileImage, pet.place.id!!, pet.id!!)
+        val uploadedUrl = validateAndUploadProfileUrl(param.profileImage, pet.placeId, pet.id!!)
 
         pet.updateProfileImage(uploadedUrl);
 

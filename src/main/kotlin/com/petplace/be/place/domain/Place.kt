@@ -6,6 +6,7 @@ import com.petplace.be.pet.domain.Pet
 import javax.persistence.*
 
 @Entity
+@Table(name = "pp_place")
 class Place(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,8 +17,7 @@ class Place(
     var profileUrl:String? = null,  // 플레이스 프로필 주소
     var deleted: Boolean = false,
 
-    @JsonManagedReference
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "place")
+    @OneToMany(mappedBy = "placeId")
     var pets: MutableList<Pet> = mutableListOf(),   // 플레이스 소속 반려동물들
 ) : BaseEntity() {
 

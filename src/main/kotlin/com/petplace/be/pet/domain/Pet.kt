@@ -9,10 +9,11 @@ import com.petplace.be.pet.dto.param.PetUpdateParam
 import javax.persistence.*
 
 @Entity
+@Table(name = "pp_pet")
 class Pet(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    val id: Long? = 0L,
 
     var name: String,                   // 이름
     var age: String?,                   // 나이
@@ -28,10 +29,8 @@ class Pet(
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pet")
     var todoList: MutableList<Todo> = mutableListOf(),
 
-    @ManyToOne
-    @JsonBackReference
-    @JoinColumn(name = "place_id")
-    var place: Place
+    @Column(name="place_id")
+    var placeId: Long
 ) : BaseEntity() {
 
     fun updateProfileImage(profileImage: String?){
