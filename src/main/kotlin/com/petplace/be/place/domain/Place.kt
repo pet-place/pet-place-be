@@ -1,12 +1,13 @@
 package com.petplace.be.place.domain
 
-import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.petplace.be.common.entity.BaseEntity
 import com.petplace.be.pet.domain.Pet
+import org.hibernate.annotations.Where
 import javax.persistence.*
 
 @Entity
 @Table(name = "pp_place")
+@Where(clause = "deleted = false")
 class Place(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
