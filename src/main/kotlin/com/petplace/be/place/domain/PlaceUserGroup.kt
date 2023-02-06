@@ -6,6 +6,7 @@ import com.petplace.be.user.domain.User
 import javax.persistence.*
 
 @Entity
+@Table(name = "pp_place_user_group")
 class PlaceUserGroup(
     @Id
     @GeneratedValue
