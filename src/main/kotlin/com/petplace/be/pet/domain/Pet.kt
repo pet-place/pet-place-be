@@ -1,9 +1,6 @@
 package com.petplace.be.pet.domain
 
-import com.fasterxml.jackson.annotation.JsonBackReference
-import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.petplace.be.common.entity.BaseEntity
-import com.petplace.be.place.domain.Place
 import com.petplace.be.pet.Gender
 import com.petplace.be.pet.dto.param.PetUpdateParam
 import javax.persistence.*
@@ -25,8 +22,7 @@ class Pet(
     var disliked: String?,              // 싫어하는 것
     var profileImage: String? = null,
 
-    @JsonManagedReference
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pet")
+    @OneToMany(mappedBy = "petId", cascade = [CascadeType.REMOVE])
     var todoList: MutableList<Todo> = mutableListOf(),
 
     @Column(name="place_id")

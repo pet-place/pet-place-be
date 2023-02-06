@@ -28,7 +28,7 @@ class TodoService(
                 startDate = param.startDate,
                 endDate = param.endDate,
                 memo = param.memo,
-                pet = pet
+                petId =param.petId
         ))
         return TodoResult.generateFrom(todo)
     }
@@ -53,7 +53,7 @@ class TodoService(
 
     fun findTodoList(petId: Long): MutableList<TodoResult> {
         val pet = petService.findPet(petId)
-        return todoRepository.findAllByPet(pet).stream()
+        return todoRepository.findAllByPetId(petId).stream()
                .map { todo -> TodoResult.generateFrom(todo) }.toList()
     }
 

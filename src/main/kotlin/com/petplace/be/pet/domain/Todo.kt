@@ -23,9 +23,7 @@ data class Todo(
     @Enumerated(EnumType.STRING)
     var category: TodoCategory,
 
-    @ManyToOne
-    @JoinColumn(name = "pet_id")
-    val pet: Pet
+    val petId: Long
 ){
     fun update(category: TodoCategory, frequency: Int, startDate: LocalDate?, endDate: LocalDate?, memo: String?){
         this.category = category

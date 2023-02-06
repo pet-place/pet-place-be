@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface TodoRepository :JpaRepository<Todo, Long>{
 
-    fun findAllByPet(@Param("pet") pet: Pet) : MutableList<Todo>
+    fun findAllByPetId(@Param("petId") petId: Long) : MutableList<Todo>
 }
