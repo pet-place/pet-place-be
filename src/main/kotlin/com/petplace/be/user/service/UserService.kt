@@ -7,9 +7,12 @@ import com.petplace.be.common.exception.CommonException
 import com.petplace.be.user.domain.User
 import com.petplace.be.user.dto.SignUpResult
 import com.petplace.be.user.repository.UserRepository
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
+import kotlin.random.Random
 
 @Service
 @Transactional
@@ -17,6 +20,12 @@ class UserService(
     private val userRepository: UserRepository,
     private val jwtTokenProvider: JwtTokenProvider
 ) {
+    @Value("\${user.default-profile-image-url.prefix}")
+    lateinit var DEFAULT_PROFILE_IMAGE_URL_PREFIX: String
+
+    @Value("\${user.default-profile-image-url.extension}")
+    lateinit var DEFAULT_PROFILE_IMAGE_URL_EXTENSION: String
+
     fun signUp(googleIdToken: String, nickname: String): SignUpResult {
         if (userRepository.existsByNickname(nickname)) {
             throw CommonException(ErrorCode.DUPLICATE_NICKNAME)
@@ -31,7 +40,8 @@ class UserService(
 
         val user = User(
             email = email,
-            nickname = nickname
+            nickname = nickname,
+            profileUrl = getRandomDefaultProfileImageUrl()
         )
 
         val signedUpUser = userRepository.save(user)
@@ -49,6 +59,10 @@ class UserService(
         )
     }
 
+    private fun getRandomDefaultProfileImageUrl(): String {
+        return "${DEFAULT_PROFILE_IMAGE_URL_PREFIX}${(Random.nextInt(5) + 1)}.${DEFAULT_PROFILE_IMAGE_URL_EXTENSION}"
+    }
+
     @Transactional(readOnly = true)
     fun findUserByEmail(email: String): Optional<User> {
         return userRepository.findByEmail(email)
@@ -59,7 +73,20 @@ class UserService(
         return userRepository.findById(id).orElseThrow { throw CommonException(ErrorCode.USER_NOT_FOUND) }
     }
 
-    fun updateUser(user: User) {
-        userRepository.save(user)
+    fun updateUserNickname(newNickname: String) {
+        val currentUser = getUserById(getCurrentUserId())
+        if (currentUser.nickname == newNickname) {
+            throw CommonException(ErrorCode.UNKNOWN)
+        }
+        currentUser.nickname = newNickname
+    }
+
+    private fun getCurrentUserId(): Long {
+        return SecurityContextHolder.getContext().authentication.principal as Long
+    }
+
+    fun deleteUser() {
+        val currentUser = getUserById(getCurrentUserId())
+        userRepository.delete(currentUser)
     }
 }

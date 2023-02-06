@@ -41,7 +41,6 @@ class AuthService(
         val refreshToken: String = jwtTokenProvider.issueRefreshToken(signedUpUser.id!!)
 
         signedUpUser.refreshToken = refreshToken;
-        userService.updateUser(user.get())
 
         return SignInResult(
             nickname = user.get().nickname!!,
@@ -58,8 +57,6 @@ class AuthService(
         val user = userService.getUserById(userId)
 
         if (refreshToken != user.refreshToken) {
-            println(refreshToken)
-            println(user.refreshToken)
             throw CommonException(ErrorCode.REFRESH_TOKEN_NOT_MATCHED)
         }
 
@@ -67,7 +64,6 @@ class AuthService(
         val newRefreshToken = jwtTokenProvider.issueRefreshToken(userId)
 
         user.refreshToken = newRefreshToken
-        userService.updateUser(user)
 
         return RefreshAccessTokenResult(
             accessToken = newAccessToken,
