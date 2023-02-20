@@ -3,7 +3,7 @@ package com.petplace.be.user.controller
 import com.petplace.be.common.response.BaseResponse
 import com.petplace.be.user.dto.SignUpParam
 import com.petplace.be.user.dto.SignUpResult
-import com.petplace.be.user.dto.UpdateNickNameParam
+import com.petplace.be.user.dto.UpdateNicknameParam
 import com.petplace.be.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.*
@@ -21,8 +21,8 @@ class UserController(
 
     @Operation(summary = "회원 닉네임 수정", description = "등록된 회원의 닉네임을 수정합니다.")
     @PutMapping("/nickname")
-    fun updateUserNickname(@RequestBody updateNickNameParam: UpdateNickNameParam): BaseResponse<Void> {
-        userService.updateUserNickname(updateNickNameParam.newNickName)
+    fun updateUserNickname(@RequestBody updateNicknameParam: UpdateNicknameParam): BaseResponse<Void> {
+        userService.updateUserNickname(updateNicknameParam.newNickname)
         return BaseResponse()
     }
 

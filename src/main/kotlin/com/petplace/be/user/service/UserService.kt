@@ -27,9 +27,7 @@ class UserService(
     lateinit var DEFAULT_PROFILE_IMAGE_URL_EXTENSION: String
 
     fun signUp(googleIdToken: String, nickname: String): SignUpResult {
-        if (userRepository.existsByNickname(nickname)) {
-            throw CommonException(ErrorCode.DUPLICATE_NICKNAME)
-        }
+        checkNicknameDuplication(nickname)
 
         val token = GoogleAuthentication.verifierIdToken(googleIdToken)
             ?: throw CommonException(ErrorCode.INVALID_GOOGLE_ID_TOKEN)
@@ -60,6 +58,12 @@ class UserService(
         )
     }
 
+    private fun checkNicknameDuplication(newNickname: String) {
+        if (userRepository.existsByNickname(newNickname)) {
+            throw CommonException(ErrorCode.DUPLICATE_NICKNAME)
+        }
+    }
+
     private fun getRandomDefaultProfileImageUrl(): String {
         return "${DEFAULT_PROFILE_IMAGE_URL_PREFIX}${(Random.nextInt(5) + 1)}.${DEFAULT_PROFILE_IMAGE_URL_EXTENSION}"
     }
@@ -79,9 +83,7 @@ class UserService(
         if (currentUser.nickname == newNickname) {
             throw CommonException(ErrorCode.UNKNOWN)
         }
-        if (userRepository.existsByNickname(newNickname)) {
-            throw CommonException(ErrorCode.DUPLICATE_NICKNAME)
-        }
+        checkNicknameDuplication(newNickname)
         currentUser.nickname = newNickname
     }
 
