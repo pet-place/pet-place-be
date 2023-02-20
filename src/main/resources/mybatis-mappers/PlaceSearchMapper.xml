@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.petplace.be.place_search.repository.PlaceSearchMapper">
+    <select id="findAllByKeywords"
+            parameterType="java.lang.String"
+            resultType="com.petplace.be.place_search.dto.PlaceSearchResult">
+        select * from pp_place
+        <trim prefix="WHERE (" suffix=")" prefixOverrides="OR">
+            <foreach collection="keywords" item="keyword" index="index" >
+                <trim prefix="OR">
+                    name like '%'||#{keyword}||'%'
+                </trim>
+            </foreach>
+        </trim>
+    </select>
+</mapper>

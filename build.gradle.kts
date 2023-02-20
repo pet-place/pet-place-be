@@ -49,6 +49,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3
 	implementation("com.amazonaws:aws-java-sdk-s3:1.12.361")
 
+	implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.1")
 
 	runtimeOnly("com.h2database:h2")
 	runtimeOnly("mysql:mysql-connector-java")
