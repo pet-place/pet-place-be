@@ -32,7 +32,8 @@ class AuthService(
                 nickname = initialNickname,
                 accessToken = null,
                 refreshToken = null,
-                isSignedUpUser = false
+                isSignedUpUser = false,
+                profileUrl = null,
             )
         }
 
@@ -40,13 +41,14 @@ class AuthService(
         val accessToken: String = jwtTokenProvider.issueAccessToken(signedUpUser.id!!)
         val refreshToken: String = jwtTokenProvider.issueRefreshToken(signedUpUser.id!!)
 
-        signedUpUser.refreshToken = refreshToken;
+        signedUpUser.refreshToken = refreshToken
 
         return SignInResult(
-            nickname = user.get().nickname!!,
+            nickname = signedUpUser.nickname!!,
             accessToken = accessToken,
             refreshToken = refreshToken,
-            isSignedUpUser = true
+            isSignedUpUser = true,
+            profileUrl = signedUpUser.profileUrl,
         )
     }
 

@@ -4,5 +4,6 @@ data class SignUpResult(
     val nickname: String,
     val accessToken: String,
     val refreshToken: String,
-    val isSignedUpUser: Boolean
+    val isSignedUpUser: Boolean,
+    val profileUrl: String,
 )

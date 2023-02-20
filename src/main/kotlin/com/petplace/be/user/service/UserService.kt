@@ -55,7 +55,8 @@ class UserService(
             nickname = nickname,
             accessToken = accessToken,
             refreshToken = refreshToken,
-            isSignedUpUser = true
+            isSignedUpUser = true,
+            profileUrl = signedUpUser.profileUrl!!,
         )
     }
 
