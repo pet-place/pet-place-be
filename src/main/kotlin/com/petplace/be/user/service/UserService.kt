@@ -79,6 +79,9 @@ class UserService(
         if (currentUser.nickname == newNickname) {
             throw CommonException(ErrorCode.UNKNOWN)
         }
+        if (userRepository.existsByNickname(newNickname)) {
+            throw CommonException(ErrorCode.DUPLICATE_NICKNAME)
+        }
         currentUser.nickname = newNickname
     }
 
