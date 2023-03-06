@@ -88,6 +88,9 @@ class PlaceService(
     @Transactional
     fun deletePlace(id: Long){
         var place = findPlaceById(id);
+        var group = placeUserGroupRepository.findAllByPlace_Id(id)
+
+        group.forEach { group -> group.delete() }
         place.delete()
     }
 
@@ -100,6 +103,18 @@ class PlaceService(
                 val user = placeUserGroup.user
                 PlaceMemberResult(user,placeUserGroup.role!!)
         }.toList()
+    }
+
+    /* 플레이스 멤버 삭제 */
+    @Transactional
+    fun deleteUserFromPlace(id: Long, userId: Long){
+        var group = placeUserGroupRepository.findByPlace_Id_AndUserId(id, userId)
+
+        if (group.role == PlaceRole.OWNER) {
+            throw CommonException(ErrorCode.UNKNOWN)
+        }
+
+        group.delete();
     }
 
     private fun findPlaceById(id: Long): Place {

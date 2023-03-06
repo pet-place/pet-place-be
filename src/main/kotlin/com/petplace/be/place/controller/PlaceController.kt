@@ -3,6 +3,7 @@ package com.petplace.be.place.controller
 import com.petplace.be.common.response.BaseResponse
 import com.petplace.be.place.dto.param.PlaceSaveParam
 import com.petplace.be.place.dto.param.PlaceUpdateParam
+import com.petplace.be.place.dto.param.PlaceUserDeleteParam
 import com.petplace.be.place.dto.result.*
 import com.petplace.be.place.service.PlaceService
 import io.swagger.v3.oas.annotations.Operation
@@ -57,6 +58,13 @@ class PlaceController(
     fun findAllPlaceMember(@PathVariable id: Long): BaseResponse<List<PlaceMemberResult>> {
         val response = placeService.findPlaceMember(id)
         return BaseResponse(response)
+    }
+
+    @Operation(summary = "플레이스 멤버 삭제", description = "플레이스 그룹에 있는 멤버를 삭제합니다.")
+    @DeleteMapping("/member")
+    fun deleteUserFromPlace(@RequestBody param: PlaceUserDeleteParam): BaseResponse<List<PlaceMemberResult>> {
+        placeService.deleteUserFromPlace(param.id, param.userId)
+        return BaseResponse()
     }
 
 }

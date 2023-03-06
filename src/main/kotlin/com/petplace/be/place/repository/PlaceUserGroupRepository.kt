@@ -12,4 +12,6 @@ interface PlaceUserGroupRepository: JpaRepository<PlaceUserGroup, Long> {
     fun findAllByUser(@Param("user") user:User): List<PlaceUserGroup>
 
     fun findAllByPlace_Id(@Param("placeId") placeId: Long): List<PlaceUserGroup>
+
+    fun findByPlace_Id_AndUserId(@Param("placeId") placeId: Long, @Param("userId") userId:Long): PlaceUserGroup
 }
