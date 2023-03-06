@@ -1,6 +1,5 @@
 package com.petplace.be.pet.dto.result
 
-import com.petplace.be.common.entity.BaseDto
 import com.petplace.be.pet.Gender
 import com.petplace.be.pet.domain.Pet
 import com.petplace.be.pet.domain.Todo
@@ -26,7 +25,7 @@ data class PetResult(
         liked = pet.liked,
         disliked = pet.liked,
         placeId = pet.placeId,
-        profileImageUrl = BaseDto.getProfileUrl(pet.profileImage),
+        profileImageUrl = pet.profileImage,
         todoList = pet.todoList
     )
 }

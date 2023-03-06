@@ -1,6 +1,5 @@
 package com.petplace.be.place.dto.result
 
-import com.petplace.be.common.entity.BaseDto
 import com.petplace.be.place.PlaceRole
 import com.petplace.be.user.domain.User
 
@@ -12,7 +11,7 @@ data class PlaceMemberResult(
 ){
     constructor(user: User, role: PlaceRole): this(
         userId = user.id!!,
-        profileUrl = BaseDto.getProfileUrl(user.profileUrl),
+        profileUrl = user.profileUrl,
         nickname = user.nickname!!,
         role = role
     )

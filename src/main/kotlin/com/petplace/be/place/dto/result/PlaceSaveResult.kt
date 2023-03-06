@@ -1,6 +1,5 @@
 package com.petplace.be.place.dto.result
 
-import com.petplace.be.common.entity.BaseDto
 import com.petplace.be.place.domain.Place
 
 data class PlaceSaveResult(
@@ -13,6 +12,6 @@ data class PlaceSaveResult(
         id = place.id!!,
         name = place.name,
         description = place.description,
-        profileUrl = BaseDto.getProfileUrl(place.profileUrl)
+        profileUrl = place.profileUrl
     )
 }
