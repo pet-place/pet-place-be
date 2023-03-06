@@ -20,7 +20,7 @@ class PlaceUserGroup(
     var deleted:Boolean = false,
 
     @ManyToOne
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "user_id")
     var user: User,
 
     @ManyToOne
