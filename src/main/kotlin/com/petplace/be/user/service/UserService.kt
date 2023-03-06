@@ -20,9 +20,6 @@ class UserService(
     private val userRepository: UserRepository,
     private val jwtTokenProvider: JwtTokenProvider
 ) {
-    @Value("\${user.default-profile-image-url.prefix}")
-    lateinit var DEFAULT_PROFILE_IMAGE_URL_PREFIX: String
-
     @Value("\${user.default-profile-image-url.extension}")
     lateinit var DEFAULT_PROFILE_IMAGE_URL_EXTENSION: String
 
@@ -65,7 +62,7 @@ class UserService(
     }
 
     private fun getRandomDefaultProfileImageUrl(): String {
-        return "${DEFAULT_PROFILE_IMAGE_URL_PREFIX}${(Random.nextInt(5) + 1)}.${DEFAULT_PROFILE_IMAGE_URL_EXTENSION}"
+        return "user/${(Random.nextInt(5) + 1)}.${DEFAULT_PROFILE_IMAGE_URL_EXTENSION}"
     }
 
     @Transactional(readOnly = true)
