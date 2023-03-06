@@ -9,6 +9,12 @@ class PlaceSearchService(
     private val placeSearchMapper: PlaceSearchMapper,
 ) {
     fun searchByKeywords(keywords: String): List<PlaceSearchResult> {
-        return placeSearchMapper.findAllByKeywords(keywords.split(","))
+        return placeSearchMapper.findAllByKeywords(extractKeywords(keywords))
+    }
+
+    private fun extractKeywords(keywords: String): List<String> {
+        return keywords.split(",")
+            .flatMap { commaSplit -> commaSplit.split(" ") }
+            .filter { keyword -> keyword.isNotEmpty() && keyword.isNotBlank() }
     }
 }
