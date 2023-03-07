@@ -2,10 +2,13 @@ package com.petplace.be.config
 
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.security.SecurityRequirement
+import io.swagger.v3.oas.models.security.SecurityScheme
 import org.springdoc.core.GroupedOpenApi
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.util.*
 
 
 @Configuration
@@ -16,9 +19,14 @@ class SwaggerConfig {
             .title("Pet Place APIs")
             .version(springdocVersion)
             .description("펫 플레이스 API 명세서")
+
+        val securityScheme = SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT").`in`(SecurityScheme.In.HEADER).name("Authorization")
+        val securityRequirement = SecurityRequirement().addList("bearerAuth")
+
         return OpenAPI()
-            .components(Components())
-            .info(info)
+                .components(Components().addSecuritySchemes("bearerAuth", securityScheme))
+                .security(listOf(securityRequirement))
+                .info(info)
     }
 
     @Bean
