@@ -20,7 +20,7 @@ class SwaggerConfig {
             .version(springdocVersion)
             .description("펫 플레이스 API 명세서")
 
-        val securityScheme = SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT").`in`(SecurityScheme.In.HEADER).name("Authorization")
+        val securityScheme = SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT").`in`(SecurityScheme.In.HEADER).name("Authorization").description("Token 값만 입력")
         val securityRequirement = SecurityRequirement().addList("bearerAuth")
 
         return OpenAPI()
