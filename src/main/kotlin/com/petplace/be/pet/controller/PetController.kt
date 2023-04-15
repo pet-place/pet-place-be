@@ -26,9 +26,9 @@ class PetController(
     }
 
     @Operation(summary = "반려동물 수정", description = "반려동물을 수정합니다.")
-    @PutMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
-    fun updatePet(@ModelAttribute param: PetUpdateParam): BaseResponse<PetResult> {
-        val response = petService.updatePet(param)
+    @PutMapping("/{id}", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
+    fun updatePet(@PathVariable id: Long, @ModelAttribute param: PetUpdateParam): BaseResponse<PetResult> {
+        val response = petService.updatePet(id, param)
         return BaseResponse(response)
     }
 

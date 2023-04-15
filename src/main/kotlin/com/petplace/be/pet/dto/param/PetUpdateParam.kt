@@ -4,7 +4,6 @@ import com.petplace.be.pet.Gender
 import org.springframework.web.multipart.MultipartFile
 
 data class PetUpdateParam(
-    val id: Long,
     val name: String,
     val age: String?,
     val gender: Gender,

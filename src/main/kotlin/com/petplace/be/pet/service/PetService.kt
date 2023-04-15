@@ -42,10 +42,10 @@ class PetService(
     }
 
     @Transactional
-    fun updatePet(param: PetUpdateParam): PetResult{
-        val pet = findPet(param.id)
+    fun updatePet(id: Long, param: PetUpdateParam): PetResult{
+        val pet = findPet(id)
 
-        val uploadedUrl:String? = validateAndUploadProfileUrl(param.profileImage, param.id, param.placeId)
+        val uploadedUrl:String? = validateAndUploadProfileUrl(param.profileImage, id, param.placeId)
         pet.updateProfileImage(uploadedUrl)
         pet.update(param)
 
