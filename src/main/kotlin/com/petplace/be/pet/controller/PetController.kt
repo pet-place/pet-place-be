@@ -1,11 +1,13 @@
 package com.petplace.be.pet.controller
 
 import com.petplace.be.common.response.BaseResponse
+import com.petplace.be.pet.TodoCategory
 import com.petplace.be.pet.dto.param.PetSaveParam
 import com.petplace.be.pet.dto.param.PetUpdateParam
 import com.petplace.be.pet.dto.result.PetResult
 import com.petplace.be.pet.service.PetService
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
@@ -42,5 +44,17 @@ class PetController(
     fun deletePet(@PathVariable id: Long): BaseResponse<PetResult> {
         petService.deleteById(id)
         return BaseResponse()
+    }
+
+    @Operation(summary = "반려동물 todo 카테고리 목록 조회", description = "Todo 등록시 사용할 카테고리 목록을 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "한글 문자열로 반환됩니다.")
+    @GetMapping("/todos/categories")
+    fun getCategoryList(): BaseResponse<List<String>> {
+        val array = TodoCategory.values()
+        val categoryList = mutableListOf<String>()
+        for (a in array){
+            categoryList.add(a.value)
+        }
+        return BaseResponse(categoryList)
     }
 }

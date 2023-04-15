@@ -19,8 +19,9 @@ class TodoService(
 ) {
 
     @Transactional
-    fun saveTodo(param: TodoSaveParam): TodoResult{
-        val pet = petService.findPet(param.petId)
+    fun saveTodo(petId: Long, param: TodoSaveParam): TodoResult{
+        // pet 조회
+        val pet = petService.findPet(petId)
         val todo = todoRepository.save(
             Todo(
                 category = param.category,
@@ -28,14 +29,14 @@ class TodoService(
                 startDate = param.startDate,
                 endDate = param.endDate,
                 memo = param.memo,
-                petId =param.petId
+                petId = petId
         ))
         return TodoResult.generateFrom(todo)
     }
 
     @Transactional
-    fun updateTodo(param: TodoUpdateParam): TodoResult{
-        val todo = findTodo(param.id)
+    fun updateTodo(petId: Long, todoId: Long, param: TodoUpdateParam): TodoResult{
+        val todo = findTodo(petId, todoId)
         todo.update(
             param.category,
             param.frequency,
@@ -47,8 +48,9 @@ class TodoService(
     }
 
     @Transactional
-    fun deleteTodo(id: Long){
-        todoRepository.deleteById(id)
+    fun deleteTodo(petId: Long, todoId: Long){
+        findTodo(petId, todoId)
+        todoRepository.deleteById(todoId)
     }
 
     fun findTodoList(petId: Long): MutableList<TodoResult> {
@@ -57,23 +59,14 @@ class TodoService(
                .map { todo -> TodoResult.generateFrom(todo) }.toList()
     }
 
-    fun categoryList(): List<String>{
-        val array = TodoCategory.values()
-        val categoryList = mutableListOf<String>()
-        for (a in array){
-            categoryList.add(a.korValue)
-        }
-        return categoryList
-    }
-
     @Transactional
-    fun checkTodo(checked: Boolean, id: Long): TodoCountResult{
-        val todo = findTodo(id)
+    fun checkTodo(petId: Long, todoId: Long, checked: Boolean): TodoCountResult{
+        val todo = findTodo(petId, todoId)
         val count = todo.updateFrequency(checked)
         return TodoCountResult(id = todo.id!!, count = count)
     }
 
-    fun findTodo(id: Long): Todo{
-        return todoRepository.findById(id).orElseThrow { CommonException(ErrorCode.TODO_NOT_FOUND) }
+    fun findTodo(petId: Long, id: Long): Todo{
+        return todoRepository.findByIdAndPetId(petId, id).orElseThrow { CommonException(ErrorCode.TODO_NOT_FOUND) }
     }
 }

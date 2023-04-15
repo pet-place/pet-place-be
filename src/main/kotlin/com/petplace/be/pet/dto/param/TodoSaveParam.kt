@@ -8,6 +8,5 @@ data class TodoSaveParam(
     val frequency: Int,
     val startDate: LocalDate?,
     val endDate: LocalDate?,
-    val memo: String?,
-    val petId: Long
+    val memo: String?
 )
