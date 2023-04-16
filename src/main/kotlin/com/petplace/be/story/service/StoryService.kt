@@ -33,8 +33,8 @@ class StoryService(
     val storyUserLikeRepository: StoryUserLikeRepository,
 ) {
     companion object {
-        const val MAX_IMAGE_FILE_QUANTITY = 5
-        val ALLOWED_CONTENT_TYPES = listOf<String>(MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE)
+        private const val MAX_IMAGE_FILE_QUANTITY = 5
+        private val ALLOWED_CONTENT_TYPES = listOf<String>(MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE)
     }
 
     fun saveStory(title: String, contents: String, imageFiles: List<MultipartFile>): Long {
