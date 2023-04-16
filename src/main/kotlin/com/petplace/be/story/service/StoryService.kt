@@ -181,23 +181,23 @@ class StoryService(
         return savedStoryComment.id!!
     }
 
-    fun updateStoryComment(storyId: Long, storyCommentId: Long, contents: String) {
+    fun updateStoryComment(storyId: Long, commentId: Long, contents: String) {
         findStory(storyId)
 
         val userId = getCurrentUserId()
 
-        val storyComment = findStoryComment(storyCommentId)
+        val storyComment = findStoryComment(commentId)
         storyComment.contents = contents
         storyComment.modifiedBy = userId
     }
 
-    private fun findStoryComment(storyCommentId: Long): StoryComment {
-        return storyCommentRepository.findById(storyCommentId).orElseThrow { throw CommonException(ErrorCode.UNKNOWN) }
+    private fun findStoryComment(commentId: Long): StoryComment {
+        return storyCommentRepository.findById(commentId).orElseThrow { throw CommonException(ErrorCode.UNKNOWN) }
     }
 
-    fun deleteStoryComment(storyId: Long, storyCommentId: Long) {
+    fun deleteStoryComment(storyId: Long, commentId: Long) {
         findStory(storyId)
-        val storyComment = findStoryComment(storyCommentId)
+        val storyComment = findStoryComment(commentId)
         storyCommentRepository.delete(storyComment)
     }
 
@@ -214,26 +214,31 @@ class StoryService(
         )
     }
 
-    fun saveStoryUserLike(storyId: Long) {
+    fun updateStoryLikeStatus(storyId: Long, like: Boolean) {
         val story = findStory(storyId)
         val userId = getCurrentUserId()
+        if (like) {
+            increaseStoryLikeCount(storyId, userId)
+        } else {
+            decreaseStoryLikeCount(storyId, userId)
+        }
+        updateStoryLikeCount(story)
+    }
+
+    private fun increaseStoryLikeCount(storyId: Long, userId: Long) {
         if (storyUserLikeRepository.existsByStoryIdAndUserId(storyId, userId)) {
             throw CommonException(ErrorCode.UNKNOWN)
         }
         storyUserLikeRepository.save(StoryUserLike(storyId = storyId, userId = userId))
-        updateStoryLikeCount(story)
+    }
+
+    private fun decreaseStoryLikeCount(storyId: Long, userId: Long) {
+        val storyUserLike = storyUserLikeRepository.findByStoryIdAndUserId(storyId, userId)
+            .orElseThrow { throw CommonException(ErrorCode.UNKNOWN) }
+        storyUserLikeRepository.delete(storyUserLike)
     }
 
     private fun updateStoryLikeCount(story: Story) {
         story.likeCount = storyUserLikeRepository.countAllByStoryId(story.id!!)
-    }
-
-    fun deleteStoryUserLike(storyId: Long) {
-        val story = findStory(storyId)
-        val userId = getCurrentUserId()
-        val storyUserLike = storyUserLikeRepository.findByStoryIdAndUserId(storyId, userId)
-            .orElseThrow { throw CommonException(ErrorCode.UNKNOWN) }
-        storyUserLikeRepository.delete(storyUserLike)
-        updateStoryLikeCount(story)
     }
 }
