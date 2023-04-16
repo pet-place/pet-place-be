@@ -9,25 +9,25 @@ import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 class UserController(
     private val userService: UserService
 ) {
-    @Operation(summary = "회원가입", description = "새 회원을 등록합니다.")
+    @Operation(summary = "회원 등록", description = "새 회원을 등록합니다.")
     @PostMapping("/sign-up")
     fun signUp(@RequestBody signUpParam: SignUpParam): BaseResponse<SignUpResult> {
         return BaseResponse(userService.signUp(signUpParam.googleIdToken, signUpParam.nickname))
     }
 
-    @Operation(summary = "회원 닉네임 수정", description = "등록된 회원의 닉네임을 수정합니다.")
-    @PutMapping("/nickname")
+    @Operation(summary = "회원 닉네임 수정", description = "현재 회원의 닉네임을 수정합니다.")
+    @PutMapping("/me/nickname")
     fun updateUserNickname(@RequestBody updateNicknameParam: UpdateNicknameParam): BaseResponse<Void> {
         userService.updateUserNickname(updateNicknameParam.newNickname)
         return BaseResponse()
     }
 
-    @Operation(summary = "회원 탈퇴", description = "등록된 회원을 삭제합니다.")
-    @DeleteMapping
+    @Operation(summary = "회원 탈퇴", description = "현재 회원을 탈퇴 처리합니다.")
+    @DeleteMapping("/me")
     fun deleteUser(): BaseResponse<Void> {
         userService.deleteUser()
         return BaseResponse()
