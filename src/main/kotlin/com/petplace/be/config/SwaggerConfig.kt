@@ -51,7 +51,7 @@ class SwaggerConfig {
 
     @Bean
     fun userAPI(): GroupedOpenApi {
-        val paths = arrayOf("/user/**")
+        val paths = arrayOf("/users/**")
 
         return GroupedOpenApi.builder()
             .group("사용자 API")
@@ -61,7 +61,7 @@ class SwaggerConfig {
 
     @Bean
     fun storyAPI(): GroupedOpenApi {
-        val paths = arrayOf("/story/**")
+        val paths = arrayOf("/stories/**")
 
         return GroupedOpenApi.builder()
             .group("story API")

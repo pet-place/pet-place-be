@@ -38,7 +38,7 @@ class SecurityConfig(
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .addFilterBefore(jwtExceptionHandlerFilter, JwtAuthenticationFilter::class.java)
             .authorizeRequests()
-            .antMatchers("/auth/**", "/user/sign-up/**").permitAll()
+            .antMatchers("/auth/**", "/users/sign-up/**").permitAll()
             .and()
             .authorizeRequests()
             .anyRequest().authenticated()
