@@ -75,10 +75,10 @@ class PlaceService(
 
     /* 플레이스 수정 */
     @Transactional
-    fun updatePlace(param: PlaceUpdateParam): PlaceUpdateResult{
-        val place = findPlaceById(param.id)
+    fun updatePlace(id: Long, param: PlaceUpdateParam): PlaceUpdateResult{
+        val place = findPlaceById(id)
 
-        val uploadedUrl: String? = validateAndUploadProfileUrl(param.profileImage, param.id)
+        val uploadedUrl: String? = validateAndUploadProfileUrl(param.profileImage, id)
         place.update(param.name, param.description, uploadedUrl)
 
         return PlaceUpdateResult(place)

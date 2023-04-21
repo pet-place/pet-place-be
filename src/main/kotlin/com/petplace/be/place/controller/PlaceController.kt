@@ -32,9 +32,9 @@ class PlaceController(
     }
 
     @Operation(summary = "플레이스 수정", description = "플레이스가 수정됩니다.")
-    @PutMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
-    fun updatePlace(@ModelAttribute param: PlaceUpdateParam): BaseResponse<PlaceUpdateResult> {
-        val response = placeService.updatePlace(param);
+    @PutMapping("/{id}", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
+    fun updatePlace(@PathVariable id: Long, @ModelAttribute param: PlaceUpdateParam): BaseResponse<PlaceUpdateResult> {
+        val response = placeService.updatePlace(id, param);
         return BaseResponse(response);
     }
 
@@ -53,7 +53,7 @@ class PlaceController(
     }
 
     @Operation(summary = "플레이스 멤버 목록 조회", description = "플레이스의 멤버 목록을 조회합니다.")
-    @GetMapping("/{id}/member")
+    @GetMapping("/{id}/members")
     fun findAllPlaceMember(@PathVariable id: Long): BaseResponse<List<PlaceMemberResult>> {
         val response = placeService.findPlaceMember(id)
         return BaseResponse(response)
