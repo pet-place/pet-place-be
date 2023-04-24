@@ -49,12 +49,7 @@ class PetController(
     @Operation(summary = "반려동물 todo 카테고리 목록 조회", description = "Todo 등록시 사용할 카테고리 목록을 조회합니다.")
     @ApiResponse(responseCode = "200", description = "한글 문자열로 반환됩니다.")
     @GetMapping("/todos/categories")
-    fun getCategoryList(): BaseResponse<List<String>> {
-        val array = TodoCategory.values()
-        val categoryList = mutableListOf<String>()
-        for (a in array){
-            categoryList.add(a.value)
-        }
-        return BaseResponse(categoryList)
+    fun getCategoryList(): BaseResponse<List<Map<String,String>>> {
+        return BaseResponse(TodoCategory.toList())
     }
 }

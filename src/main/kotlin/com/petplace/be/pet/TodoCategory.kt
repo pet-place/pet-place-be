@@ -1,12 +1,22 @@
 package com.petplace.be.pet
 
-import com.fasterxml.jackson.annotation.JsonFormat
-import com.fasterxml.jackson.annotation.JsonValue
 
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 enum class TodoCategory(
-    @JsonValue
-    val korValue: String
+    val value: String
     ) {
-    MEAL("밥"), SNACK("간식"), WALK("산책"), MEDICINE("약")
+    MEAL("밥"), SNACK("간식"), WALK("산책"), MEDICINE("약");
+
+    companion object {
+        fun toList(): List<Map<String, String>> {
+            val list = mutableListOf<Map<String, String>>()
+            for (fruit in values()) {
+                val map = mutableMapOf<String, String>()
+                map["key"] = fruit.name
+                map["korValue"] = fruit.value
+                list.add(map)
+            }
+            return list
+        }
+    }
+
 }
