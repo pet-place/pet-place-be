@@ -7,7 +7,6 @@ import com.petplace.be.pet.dto.param.PetSaveParam
 import com.petplace.be.pet.dto.param.PetUpdateParam
 import com.petplace.be.pet.dto.result.PetResult
 import com.petplace.be.pet.repository.PetRepository
-import com.petplace.be.place.repository.PlaceRepository
 import com.petplace.be.utils.FileUploader
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -16,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile
 @Service
 class PetService(
     private val petRepository: PetRepository,
-    private val placeRepository: PlaceRepository,
     private val fileUploader: FileUploader
 ) {
     @Transactional
@@ -68,7 +66,7 @@ class PetService(
     private fun validateAndUploadProfileUrl(profileImage: MultipartFile?, placeId: Long, petId: Long): String?{
         if (profileImage != null && !profileImage.isEmpty) {
             var fileName = "pet-profile-$petId"
-            val key = "place-$placeId/$fileName"
+            val key = "place/place-$placeId/$fileName"
             return fileUploader.upload(profileImage, key)
         }
         return null

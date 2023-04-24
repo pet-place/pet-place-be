@@ -123,7 +123,7 @@ class PlaceService(
 
     private fun validateAndUploadProfileUrl(profileImage: MultipartFile?, placeId: Long): String?{
         if (profileImage != null && !profileImage.isEmpty){
-            val key = "place-$placeId/place-profile"
+            val key = "place/place-$placeId/place-profile"
             return fileUploader.upload(profileImage, key)
         }
         return null
